@@ -313,3 +313,12 @@ p {
   background: var(--accent);       /* ホバー時：背景をアクセントカラーに */
   transform: scale(1.1);           /* ホバー時にちょっと拡大 */
 }
+/* スマホ向け（幅600px以下）のときだけ大きくする */
+@media (max-width: 600px) {
+  .social-links a {
+    font-size: 48px;   /* アイコンサイズ */
+    width: 80px;       /* ボタンの幅 */
+    height: 80px;      /* ボタンの高さ */
+    border-width: 3px; /* 枠を少し太めに */
+  }
+}
