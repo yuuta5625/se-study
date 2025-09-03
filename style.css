@@ -8,111 +8,22 @@
 
 * { box-sizing: border-box; }
 
+/* 画面全体を縦並びにして、中央エリア(main)を伸ばす */
 body {
   margin: 0;
   font-family: 'Noto Sans JP', sans-serif;
-
   background: #fff7d6 url("./assets/background.jpg") center/cover fixed;
-  min-height: 100vh;
-}
-
-
-
-
-.container {
-  max-width: 780px;
-  margin: 40px auto;
-  padding: 0 20px;
-}
-
-.card {
-  background: var(--card);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-}
-
-h1, h2 {
-  font-family: 'Noto Sans JP', sans-serif;
-  color: var(--text);
-}
-h1 {
-  font-size: 36px;
-}
-h2 {
-  font-size: 24px;
-  margin-top: 20px;
-}
-
-.subtitle {
-  color: var(--muted);
-  margin: 0 0 24px;
-}
-
-.actions {
+  min-height: 100dvh;      /* モバイルのアドレスバー対策 */
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 16px;
+  flex-direction: column;
 }
 
-button, .link-btn {
-  appearance: none;
-  border: none;
-  background: var(--accent);
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.link-btn {
-  display: inline-block;
-  text-decoration: none;
-}
-
-button:hover, .link-btn:hover {
-  opacity: .9;
-}
-
-.section {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid #eee;
-}
-
-ul {
-  padding-left: 20px;
-  margin: 8px 0 0;
-}
-.card {
-  background: var(--card);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-  transition: 0.3s;   /* ← ここに移動するのがおすすめ */
-}
-
-.card:hover {
-  transform: translateY(-20px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-}
-footer {
-  text-align: center;
-  padding: 16px;
-  margin-top: 40px;
-  color: var(--muted);
-  font-size: 14px;
-  background: rgba(255,255,255,0.8);
-  border-top: 1px solid #ddd;
-}
-/* === ヘッダー === */
+/* ヘッダー */
 header {
   background: rgba(255,255,255,0.9);
   backdrop-filter: blur(6px);
   border-bottom: 1px solid #ddd;
-  position: sticky;  /* ← スクロールしても固定 */
+  position: sticky;  /* スクロールしても固定 */
   top: 0;
   z-index: 100;
 }
@@ -147,7 +58,84 @@ header {
   font-weight: 500;
   transition: color 0.2s;
 }
+.nav-list a:hover { color: var(--accent); }
 
-.nav-list a:hover {
-  color: var(--accent);
+/* メイン領域を伸ばしてフッターを下へ押しやる */
+main { flex: 1; }
+
+.container {
+  max-width: 780px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  transition: 0.3s;
+}
+.card:hover {
+  transform: translateY(-20px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+h1, h2 {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--text);
+}
+h1 { font-size: 36px; }
+h2 {
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+/* アンカーで飛んだとき、stickyヘッダーに隠れないようにする */
+[id] { scroll-margin-top: 72px; } /* ヘッダー高さに合わせて調整 */
+
+.subtitle {
+  color: var(--muted);
+  margin: 0 0 24px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+button, .link-btn {
+  appearance: none;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.link-btn { display: inline-block; text-decoration: none; }
+button:hover, .link-btn:hover { opacity: .9; }
+
+.section {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+ul { padding-left: 20px; margin: 8px 0 0; }
+
+/* フッター（重複を1つに統一） */
+footer {
+  text-align: center;
+  padding: 16px;
+  color: var(--muted);
+  font-size: 14px;
+  background: rgba(255,255,255,0.8);
+  border-top: 1px solid #ddd;
+  /* 必要に応じて余白をつけたいなら↓
+  margin-top: 40px;
+  */
 }
