@@ -80,3 +80,53 @@ footer {
   background: rgba(255,255,255,0.8);
   border-top: 1px solid #ddd;
 }
+/* === ハンバーガー基本 === */
+.nav-toggle {
+  display: none;               /* PCでは非表示 */
+  background: transparent;
+  border: 0;
+  padding: 8px;
+  cursor: pointer;
+}
+.nav-toggle-bar {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  margin: 5px 0;
+  transition: transform .2s, opacity .2s;
+}
+
+/* スマホ幅でメニューを折りたたみ */
+@media (max-width: 768px) {
+  .nav-toggle { display: inline-block; }
+
+  /* デフォルトは閉じる */
+  #global-nav {
+    display: none;
+    position: absolute;
+    left: 0; right: 0;
+    top: calc(56px + 0px);        /* ヘッダーの下に展開（必要なら調整） */
+    background: rgba(255,255,255,0.98);
+    border-bottom: 1px solid #ddd;
+    padding: 12px 16px;
+  }
+  #global-nav.open { display: block; }
+
+  /* メニューは縦並び */
+  .nav-list {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .nav-list a {
+    display: block;
+    padding: 8px 0;
+  }
+}
+
+/* （任意）開閉時の×アイコンっぽい変形 */
+@media (max-width: 768px) {
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+}

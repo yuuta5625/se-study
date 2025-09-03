@@ -11,17 +11,25 @@
 <body>
   <!-- ✅ ヘッダー（そのまま使える） -->
   <header>
-    <div class="header-container">
-      <h1 class="site-title">ここがヘッダーか！</h1>
-      <nav>
-        <ul class="nav-list">
-          <li><a href="#profile">プロフィール</a></li>
-          <li><a href="#works">作品</a></li>
-          <li><a href="#contact">お問い合わせ</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <div class="header-container">
+    <h1 class="site-title">ここがヘッダーか！</h1>
+
+    <!-- ハンバーガーボタン：スマホで表示（PCでは非表示） -->
+    <button class="nav-toggle" aria-label="メニューを開閉" aria-expanded="false" aria-controls="global-nav">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+
+    <nav id="global-nav">
+      <ul class="nav-list">
+        <li><a href="#profile">プロフィール</a></li>
+        <li><a href="#works">作品</a></li>
+        <li><a href="#contact">お問い合わせ</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
   <!-- ✅ メイン（元の中身を復元） -->
   <main>
