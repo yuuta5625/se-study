@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
   <meta charset="UTF-8" />
   <title>テストページ</title>
   <link rel="stylesheet" href="./style.css" />
@@ -39,7 +41,7 @@
              style="width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:12px;" />
 
         <h1>ようこそ！私の勉強ページへ 🚀（更新テスト）</h1>
-        <p class="subtitle"><p>フロントエンドエンジニアを目指しています。</p>
+        <p>フロントエンドエンジニアを目指しています。</p>
 <p>学んだことをすぐに形にする行動力を強みとし、ポートフォリオ制作やUIデザインの改善に取り組んでいます。</p>
 <p>将来的には React を活用して、よりインタラクティブなWeb体験を提供できるエンジニアを目指します。</p>
 
@@ -57,7 +59,12 @@
     <li>趣味：テニス</li>
     <li>強み：瞬間記憶能力・最後までやり遂げる執着心</li>
   </ul>
+
+  <!-- 箇条書きの外で詳しく説明する -->
+  <p>新しい知識やコードを素早く吸収し、実践に活かせるため、変化の早いフロントエンド分野に適応できます。</p>
+  <p>また、一度取り組んだ課題は解決するまで粘り強く向き合い、責任を持って最後までやり遂げる姿勢があります。</p>
 </div>
+
 
 
         <!-- 追加セクション（空でもOK。ナビのリンク先になる） -->
@@ -78,32 +85,39 @@
   <h2>作品</h2>
 
   <div class="works-grid">
-    <article class="work-card">
-      <img src="./assets/samune1.JPG" alt="作品1のサムネイル" />
-      <div class="work-body">
-        <h3>ポートフォリオサイト</h3>
-        <p>HTML/CSS/JSで作った自己紹介サイト。レスポンシブ対応。</p>
-        <a class="link-btn" href="https://github.com/yuuta5625" target="_blank" rel="noopener">リポジトリ</a>
-      </div>
-    </article>
+   <article class="work-card">
+  <img src="./assets/samune1.JPG" alt="作品1のサムネイル" />
+  <div class="work-body">
+    <h3>ポートフォリオサイト</h3>
+    <p>HTML/CSS/JSで作った自己紹介サイト。レスポンシブ対応。</p>
+    <p><strong>使用技術：</strong> HTML / CSS / JavaScript</p>
+    <p><strong>工夫した点：</strong> スマホでも見やすいようにレスポンシブデザインを意識しました。</p>
+    <a class="link-btn" href="https://github.com/yuuta5625" target="_blank" rel="noopener">リポジトリ</a>
+  </div>
+</article>
 
-    <article class="work-card">
-      <img src="./assets/samune2.JPG" alt="作品2のサムネイル" />
-      <div class="work-body">
-        <h3>ミニアプリ</h3>
-        <p>API を使った小さなツール。学習用に実装。</p>
-        <a class="link-btn" href="#" target="_blank" rel="noopener">デモ</a>
-      </div>
-    </article>
+<article class="work-card">
+  <img src="./assets/samune2.JPG" alt="作品2のサムネイル" />
+  <div class="work-body">
+    <h3>ミニアプリ</h3>
+    <p>API を使った小さなツール。学習用に実装。</p>
+    <p><strong>使用技術：</strong> HTML / CSS / JavaScript / 外部API</p>
+    <p><strong>工夫した点：</strong> APIレスポンスを加工して、ユーザーに分かりやすく表示するよう工夫しました。</p>
+    <a class="link-btn" href="#" target="_blank" rel="noopener">デモ</a>
+  </div>
+</article>
 
-    <article class="work-card">
-      <img src="./assets/samune3.JPG" alt="作品3のサムネイル" />
-      <div class="work-body">
-        <h3>UI コンポーネント集</h3>
-        <p>ボタンやカードなど再利用しやすいUIをまとめました。</p>
-        <a class="link-btn" href="#" target="_blank" rel="noopener">詳しく</a>
-      </div>
-    </article>
+<article class="work-card">
+  <img src="./assets/samune3.JPG" alt="作品3のサムネイル" />
+  <div class="work-body">
+    <h3>UI コンポーネント集</h3>
+    <p>ボタンやカードなど再利用しやすいUIをまとめました。</p>
+    <p><strong>使用技術：</strong> HTML / CSS / JavaScript</p>
+    <p><strong>工夫した点：</strong> デザインを統一し、複数のページで使い回せるようにしました。</p>
+    <a class="link-btn" href="#" target="_blank" rel="noopener">詳しく</a>
+  </div>
+</article>
+
   </div>
 </div>
 
@@ -137,6 +151,21 @@
   <script src="main.js"></script>
 
   <!-- ✅ フッター（最下部） -->
-  <footer>© ここがフッターだよ！</footer>
+<footer>
+  <p>© ここがフッターだよ！</p>
+  <div class="social-links">
+    <a href="https://github.com/yuuta5625" target="_blank" rel="noopener">
+      <i class="fab fa-github"></i>
+    </a>
+    <a href="#" target="_blank" rel="noopener">
+      <i class="fab fa-x-twitter"></i>
+    </a>
+    <a href="#" target="_blank" rel="noopener">
+      <i class="fab fa-linkedin"></i>
+    </a>
+  </div>
+</footer>
+
+
 </body>
 </html>

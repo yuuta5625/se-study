@@ -237,3 +237,79 @@ footer {
   font-weight: 500;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
+p {
+  margin: 0 0 0.5em; /* 上=0, 右=0, 下=0.5em, 左=0 */
+}
+.work-body p strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+.social-links {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.social-links a {
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+.social-links a:hover {
+  color: var(--text);
+}
+.social-links {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.social-links a {
+  color: var(--accent);
+  font-size: 24px; /* アイコンの大きさ */
+  transition: color 0.2s, transform 0.2s;
+}
+
+.social-links a:hover {
+  color: var(--text);
+  transform: scale(1.2); /* ホバーでちょっと拡大 */
+}
+.social-links {
+  margin-top: 12px;            /* 上との余白を少し広げる */
+  display: flex;
+  justify-content: center;
+  gap: 32px;                   /* アイコン同士の間隔を広げる（デフォ20px → 32px） */
+}
+
+.social-links a {
+  color: var(--accent);
+  font-size: 32px;             /* アイコンの大きさを大きめに（24px → 32px） */
+  transition: color 0.2s, transform 0.2s;
+}
+
+.social-links a:hover {
+  color: var(--text);
+  transform: scale(1.2);       /* ホバー時の拡大はそのまま */
+}
+.social-links a {
+  color: var(--accent);
+  font-size: 28px;                 /* アイコンサイズ */
+  width: 48px;                     /* ボタンの幅 */
+  height: 48px;                    /* ボタンの高さ */
+  display: flex;                   /* アイコンを中央に配置 */
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--accent); /* 枠線 */
+  border-radius: 10px;             /* ← 角丸の四角にする */
+  transition: all 0.2s;
+}
+
+.social-links a:hover {
+  color: #fff;                     /* ホバー時：アイコンを白に */
+  background: var(--accent);       /* ホバー時：背景をアクセントカラーに */
+  transform: scale(1.1);           /* ホバー時にちょっと拡大 */
+}
