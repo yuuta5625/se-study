@@ -67,3 +67,23 @@ footer {
   border-top: 1px solid #ddd;
   /* margin-top: 40px; ← 基本は外す。どうしても余白が欲しければ少しだけ */
 }
+/* ===== sticky footer を“確実に”効かせる最小セット ===== */
+html, body { height: 100%; }                 /* 念のための保険 */
+
+body {
+  display: flex;
+  flex-direction: column;
+  /* viewport 高さの互換セット（対応しているものが適用される） */
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+}
+
+/* 中央エリアを伸ばす（これがないと footer が浮く） */
+main { flex: 1 0 auto; display: block; }
+
+/* footer を自動的に最下部へ押し下げる（main と二重保険） */
+footer {
+  margin-top: auto !important;        /* 既存の margin-top を打ち消す */
+  /* 見た目のスタイルはそのままでOK（あれば残す） */
+}
