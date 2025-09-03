@@ -4,20 +4,33 @@
   <meta charset="UTF-8">
   <title>テストページ</title>
   <link rel="stylesheet" href="./style.css">
+  <!-- ✅ Google Fonts はここに置く -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
 </head>
+<header>
+  <div class="header-container">
+    <h1 class="site-title">ここがヘッダーか！</h1>
+    <nav>
+      <ul class="nav-list">
+        <li><a href="#profile">プロフィール</a></li>
+        <li><a href="#works">作品</a></li>
+        <li><a href="#contact">お問い合わせ</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
 <body>
   <div class="container">
     <div class="card">
-      <img src="IMG_3641 4.JPG" alt="プロフィール画像" 
-     style="width:120px;height:120px;
-            border-radius:50%;
-            object-fit:cover;
-            margin-bottom:12px;">
-    <h1>ようこそ！私の勉強ページへ 🚀（更新テスト）</h1>
+      <img src="./assets/me.jpg" alt="profile"
+           style="width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:12px;">
+
+      <h1>ようこそ！私の勉強ページへ 🚀（更新テスト）</h1>
       <p class="subtitle">学びながら実績を作っていきます。</p>
       <div class="actions">
         <a class="link-btn" href="https://github.com/yuuta5625" 
-   target="_blank" rel="noopener">GitHubを見る</a>
+           target="_blank" rel="noopener">GitHubを見る</a>
         <button id="greetBtn">挨拶する</button>
       </div>
 
@@ -33,5 +46,10 @@
   </div>
 
   <script src="main.js"></script>
+
+  <!-- ✅ フッターはここ -->
+  <footer>
+    © ここがフッターだよ！
+  </footer>
 </body>
 </html>
