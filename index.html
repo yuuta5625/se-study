@@ -39,34 +39,98 @@
              style="width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:12px;" />
 
         <h1>ようこそ！私の勉強ページへ 🚀（更新テスト）</h1>
-        <p class="subtitle">学びながら実績を作っていきます。</p>
+        <p class="subtitle"><p>フロントエンドエンジニアを目指しています。</p>
+<p>学んだことをすぐに形にする行動力を強みとし、ポートフォリオ制作やUIデザインの改善に取り組んでいます。</p>
+<p>将来的には React を活用して、よりインタラクティブなWeb体験を提供できるエンジニアを目指します。</p>
+
 
         <div class="actions">
           <a class="link-btn" href="https://github.com/yuuta5625" target="_blank" rel="noopener">GitHubを見る</a>
           <button id="greetBtn">挨拶する</button>
         </div>
 
-        <div class="section" id="profile">
-          <h2>プロフィール</h2>
-          <ul>
-            <li>趣味：〇〇</li>
-            <li>好きなこと：〇〇</li>
-            <li>好きな食べ物：ラーメン</li>
-          </ul>
-        </div>
+       <div class="section" id="profile">
+  <h2>プロフィール</h2>
+  <ul>
+    <li>名前：内山 雄大（うちやま ゆうた）</li>
+    <li>年齢：32歳</li>
+    <li>趣味：テニス</li>
+    <li>強み：瞬間記憶能力・最後までやり遂げる執着心</li>
+  </ul>
+</div>
+
 
         <!-- 追加セクション（空でもOK。ナビのリンク先になる） -->
-        <div class="section" id="works">
-          <h2>作品</h2>
-          <p>作成中…</p>
-        </div>
+         <!-- スキル一覧 -->
+<div class="section" id="skills">
+  <h2>スキル</h2>
+  <ul class="skills-list">
+    <li>HTML / CSS / JavaScript</li>
+    <li>Git / GitHub</li>
+    <li>React（学習中）</li>
+    <li>Figma（デザインツール）</li>
+  </ul>
+</div>
 
-        <div class="section" id="contact">
-          <h2>お問い合わせ</h2>
-          <p>作成中…</p>
-        </div>
+       <!-- 作品セクション -->
+<div class="section" id="works">
+  
+  <h2>作品</h2>
+
+  <div class="works-grid">
+    <article class="work-card">
+      <img src="./assets/samune1.JPG" alt="作品1のサムネイル" />
+      <div class="work-body">
+        <h3>ポートフォリオサイト</h3>
+        <p>HTML/CSS/JSで作った自己紹介サイト。レスポンシブ対応。</p>
+        <a class="link-btn" href="https://github.com/yuuta5625" target="_blank" rel="noopener">リポジトリ</a>
       </div>
+    </article>
+
+    <article class="work-card">
+      <img src="./assets/samune2.JPG" alt="作品2のサムネイル" />
+      <div class="work-body">
+        <h3>ミニアプリ</h3>
+        <p>API を使った小さなツール。学習用に実装。</p>
+        <a class="link-btn" href="#" target="_blank" rel="noopener">デモ</a>
+      </div>
+    </article>
+
+    <article class="work-card">
+      <img src="./assets/samune3.JPG" alt="作品3のサムネイル" />
+      <div class="work-body">
+        <h3>UI コンポーネント集</h3>
+        <p>ボタンやカードなど再利用しやすいUIをまとめました。</p>
+        <a class="link-btn" href="#" target="_blank" rel="noopener">詳しく</a>
+      </div>
+    </article>
+  </div>
+</div>
+
+<!-- お問い合わせセクション（静的サイト用：mailto） -->
+<div class="section" id="contact">
+  <h2>お問い合わせ</h2>
+
+  <form class="contact-form" action="mailto:you@example.com" method="POST" enctype="text/plain">
+    <div class="form-row">
+      <label for="name">お名前</label>
+      <input id="name" name="name" type="text" placeholder="山田 太郎" required />
     </div>
+    <div class="form-row">
+      <label for="email">メール</label>
+      <input id="email" name="email" type="email" placeholder="you@example.com" required />
+    </div>
+    <div class="form-row">
+      <label for="message">メッセージ</label>
+      <textarea id="message" name="message" rows="5" placeholder="ご用件をお書きください" required></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit">送信する</button>
+      <small class="form-note">※ mailto は端末のメーラーを起動します</small>
+    </div>
+  </form>
+</div>
   </main>
 
   <!-- 既存の main.js を使う。なければ下の最小スクリプトを参考に -->
