@@ -1,105 +1,42 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
   <meta charset="UTF-8" />
   <title>テストページ</title>
-  <link rel="stylesheet" href="./style.css" />
-  <!-- ✅ Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- アイコン & フォント -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- CSS（キャッシュ回避のため ?v=5 などのクエリを付ける） -->
+  <link rel="stylesheet" href="./style.css?v=5" />
 </head>
-<script>
-(() => {
-  const apiKey = "84a212e7221718ce1d2a784483127e2c"; // ←あなたのキー
-  const cityEl = document.getElementById("city");
-  const btnEl  = document.getElementById("getWeather");
-  const outEl  = document.getElementById("result");
-
-  const showError = (msg) => {
-    outEl.innerHTML = `<p style="color:#c00;">${msg}</p>`;
-  };
-
-  const render = (d) => {
-    const icon = d.weather?.[0]?.icon
-      ? `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`
-      : "";
-    outEl.innerHTML = `
-      <div class="weather-card">
-        <div class="left">
-          <h3>${d.name} の天気</h3>
-          <p>${d.weather[0].description} ／ 体感 ${Math.round(d.main.feels_like)}℃</p>
-          <p>気温: <strong>${Math.round(d.main.temp)}℃</strong>（最高 ${Math.round(d.main.temp_max)}℃ / 最低 ${Math.round(d.main.temp_min)}℃）</p>
-          <p>湿度: ${d.main.humidity}%　風速: ${d.wind.speed}m/s</p>
-        </div>
-        ${icon ? `<img src="${icon}" alt="icon" width="80" height="80">` : ""}
-      </div>`;
-  };
-
-  btnEl.addEventListener("click", async () => {
-    const city = cityEl.value.trim();
-    if (!city) {
-      showError("都市名を入力してください（例: Tokyo）");
-      return;
-    }
-    outEl.innerHTML = "<p>読み込み中...</p>";
-
-    try {
-      const url =
-        `https://api.openweathermap.org/data/2.5/weather` +
-        `?q=${encodeURIComponent(city)}` +
-        `&appid=${apiKey}` +
-        `&units=metric&lang=ja`;
-
-      const res = await fetch(url);
-      const data = await res.json();
-
-      if (!res.ok) {
-        // 代表的なエラーを分岐
-        if (data.cod === 401) {
-          showError("APIキーが無効か、まだ有効化されていない可能性があります（発行直後は反映に時間がかかることがあります）。");
-        } else if (data.cod === "404" || data.cod === 404) {
-          showError("都市が見つかりませんでした。英語表記で試してください（例: Tokyo / Osaka / Sapporo）。");
-        } else {
-          showError(`エラー: ${data.message || "取得に失敗しました"}`);
-        }
-        return;
-      }
-
-      render(data);
-    } catch (e) {
-      showError("通信に失敗しました。ネットワーク状況をご確認ください。");
-    }
-  });
-})();
-</script>
-
 
 <body>
-  <!-- ✅ ヘッダー（そのまま使える） -->
+  <!-- ✅ ヘッダー -->
   <header>
-  <div class="header-container">
-    <h1 class="site-title">ここがヘッダーか！</h1>
+    <div class="header-container">
+      <h1 class="site-title">ここがヘッダーか！</h1>
 
-    <!-- ハンバーガーボタン：スマホで表示（PCでは非表示） -->
-    <button class="nav-toggle" aria-label="メニューを開閉" aria-expanded="false" aria-controls="global-nav">
-      <span class="nav-toggle-bar"></span>
-      <span class="nav-toggle-bar"></span>
-      <span class="nav-toggle-bar"></span>
-    </button>
+      <!-- ハンバーガー（SP表示） -->
+      <button class="nav-toggle" aria-label="メニューを開閉" aria-expanded="false" aria-controls="global-nav">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
 
-    <nav id="global-nav">
-      <ul class="nav-list">
-        <li><a href="#profile">プロフィール</a></li>
-        <li><a href="#works">作品</a></li>
-        <li><a href="#contact">お問い合わせ</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+      <nav id="global-nav">
+        <ul class="nav-list">
+          <li><a href="#profile">プロフィール</a></li>
+          <li><a href="#works">作品</a></li>
+          <li><a href="#contact">お問い合わせ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-  <!-- ✅ メイン（元の中身を復元） -->
+  <!-- ✅ メイン -->
   <main>
     <div class="container">
       <div class="card">
@@ -108,140 +45,136 @@
 
         <h1>ようこそ！私の勉強ページへ 🚀（更新テスト）</h1>
         <p>フロントエンドエンジニアを目指しています。</p>
-<p>学んだことをすぐに形にする行動力を強みとし、ポートフォリオ制作やUIデザインの改善に取り組んでいます。</p>
-<p>将来的には React を活用して、よりインタラクティブなWeb体験を提供できるエンジニアを目指します。</p>
-
+        <p>学んだことをすぐに形にする行動力を強みとし、ポートフォリオ制作やUIデザインの改善に取り組んでいます。</p>
+        <p>将来的には React を活用して、よりインタラクティブなWeb体験を提供できるエンジニアを目指します。</p>
 
         <div class="actions">
           <a class="link-btn" href="https://github.com/yuuta5625" target="_blank" rel="noopener">GitHubを見る</a>
           <button id="greetBtn">挨拶する</button>
         </div>
 
-       <div class="section" id="profile">
-  <h2>プロフィール</h2>
-  <ul>
-    <li>名前：内山 雄大（うちやま ゆうた）</li>
-    <li>年齢：32歳</li>
-    <li>趣味：テニス</li>
-    <li>強み：瞬間記憶能力・最後までやり遂げる執着心</li>
-  </ul>
+        <!-- プロフィール -->
+        <div class="section" id="profile">
+          <h2>プロフィール</h2>
+          <ul>
+            <li>名前：内山 雄大（うちやま ゆうた）</li>
+            <li>年齢：32歳</li>
+            <li>趣味：テニス</li>
+            <li>強み：瞬間記憶能力・最後までやり遂げる執着心</li>
+          </ul>
+          <p>新しい知識やコードを素早く吸収し、実践に活かせるため、変化の早いフロントエンド分野に適応できます。</p>
+          <p>また、一度取り組んだ課題は解決するまで粘り強く向き合い、責任を持って最後までやり遂げる姿勢があります。</p>
+        </div>
 
-  <!-- 箇条書きの外で詳しく説明する -->
-  <p>新しい知識やコードを素早く吸収し、実践に活かせるため、変化の早いフロントエンド分野に適応できます。</p>
-  <p>また、一度取り組んだ課題は解決するまで粘り強く向き合い、責任を持って最後までやり遂げる姿勢があります。</p>
-</div>
+        <!-- スキル -->
+        <ul class="skills-list">
+          <li>HTML5 / CSS3（最新仕様に対応）</li>
+          <li>JavaScript（基礎） / React（学習中）</li>
+          <li>Git / GitHub（バージョン管理）</li>
+          <li>Figma（デザインツール）</li>
+          <li>Adobe Premiere Pro（動画編集）</li>
+        </ul>
 
+        <!-- 作品 -->
+        <div class="section" id="works">
+          <h2>作品</h2>
 
+          <div class="works-grid">
+            <article class="work-card">
+              <img src="./assets/samune1.JPG" alt="作品1のサムネイル" />
+              <div class="work-body">
+                <h3>ポートフォリオサイト</h3>
+                <p>HTML/CSS/JSで作った自己紹介サイト。レスポンシブ対応。</p>
+                <p><strong>使用技術：</strong> HTML / CSS / JavaScript</p>
+                <p><strong>工夫した点：</strong> スマホでも見やすいようにレスポンシブデザインを意識しました。</p>
+                <a class="link-btn" href="https://github.com/yuuta5625" target="_blank" rel="noopener">リポジトリ</a>
+              </div>
+            </article>
 
-        <!-- 追加セクション（空でもOK。ナビのリンク先になる） -->
-         <!-- スキル一覧 -->
-<ul class="skills-list">
-  <li>HTML5 / CSS3（最新仕様に対応）</li>
-  <li>JavaScript（基礎） / React（学習中）</li>
-  <li>Git / GitHub（バージョン管理）</li>
-  <li>Figma（デザインツール）</li>
-  <li>Adobe Premiere Pro（動画編集）</li>
-</ul>
+            <article class="work-card">
+              <img src="./assets/samune2.JPG" alt="作品2のサムネイル" />
+              <div class="work-body">
+                <h3>ミニアプリ</h3>
+                <p>API を使った小さなツール。学習用に実装。</p>
+                <p><strong>使用技術：</strong> HTML / CSS / JavaScript / 外部API</p>
+                <p><strong>工夫した点：</strong> APIレスポンスを加工して、ユーザーに分かりやすく表示するよう工夫しました。</p>
+                <a id="demoWeatherBtn" class="link-btn" href="#weather" rel="noopener">デモ</a>
+              </div>
+            </article>
 
+            <article class="work-card">
+              <img src="./assets/samune3.JPG" alt="作品3のサムネイル" />
+              <div class="work-body">
+                <h3>UI コンポーネント集</h3>
+                <p>ボタンやカードなど再利用しやすいUIをまとめました。</p>
+                <p><strong>使用技術：</strong> HTML / CSS / JavaScript</p>
+                <p><strong>工夫した点：</strong> デザインを統一し、複数のページで使い回せるようにしました。</p>
+                <a class="link-btn" href="#" target="_blank" rel="noopener">詳しく</a>
+              </div>
+            </article>
+          </div>
+        </div>
 
-       <!-- 作品セクション -->
-<div class="section" id="works">
-  
-  <h2>作品</h2>
+        <!-- 天気 -->
+        <div class="section" id="weather">
+          <h2>天気予報アプリ</h2>
 
-  <div class="works-grid">
-   <article class="work-card">
-  <img src="./assets/samune1.JPG" alt="作品1のサムネイル" />
-  <div class="work-body">
-    <h3>ポートフォリオサイト</h3>
-    <p>HTML/CSS/JSで作った自己紹介サイト。レスポンシブ対応。</p>
-    <p><strong>使用技術：</strong> HTML / CSS / JavaScript</p>
-    <p><strong>工夫した点：</strong> スマホでも見やすいようにレスポンシブデザインを意識しました。</p>
-    <a class="link-btn" href="https://github.com/yuuta5625" target="_blank" rel="noopener">リポジトリ</a>
-  </div>
-</article>
+          <div class="weather-row">
+            <div class="weather-ui">
+              <input id="city" type="text" placeholder="都市名を入力（例: Tokyo / Osaka / Sapporo）">
+              <button id="getWeather" type="button">検索</button>
+            </div>
 
-<article class="work-card">
-  <img src="./assets/samune2.JPG" alt="作品2のサムネイル" />
-  <div class="work-body">
-    <h3>ミニアプリ</h3>
-    <p>API を使った小さなツール。学習用に実装。</p>
-    <p><strong>使用技術：</strong> HTML / CSS / JavaScript / 外部API</p>
-    <p><strong>工夫した点：</strong> APIレスポンスを加工して、ユーザーに分かりやすく表示するよう工夫しました。</p>
-    <a class="link-btn" href="#" target="_blank" rel="noopener">デモ</a>
-  </div>
-</article>
+            <div id="result" class="weather-result">
+              <!-- 検索結果がここに描画されます -->
+            </div>
+          </div>
+        </div>
 
-<article class="work-card">
-  <img src="./assets/samune3.JPG" alt="作品3のサムネイル" />
-  <div class="work-body">
-    <h3>UI コンポーネント集</h3>
-    <p>ボタンやカードなど再利用しやすいUIをまとめました。</p>
-    <p><strong>使用技術：</strong> HTML / CSS / JavaScript</p>
-    <p><strong>工夫した点：</strong> デザインを統一し、複数のページで使い回せるようにしました。</p>
-    <a class="link-btn" href="#" target="_blank" rel="noopener">詳しく</a>
-  </div>
-</article>
+        <!-- お問い合わせ -->
+        <div class="section" id="contact">
+          <h2>お問い合わせ</h2>
+          <form class="contact-form" action="https://formspree.io/f/mblapgjd" method="POST">
+            <div class="form-row">
+              <label for="name">お名前</label>
+              <input id="name" name="name" type="text" placeholder="山田 太郎" required />
+            </div>
+            <div class="form-row">
+              <label for="email">メール</label>
+              <input id="email" name="email" type="email" placeholder="you@example.com" required />
+            </div>
+            <div class="form-row">
+              <label for="message">メッセージ</label>
+              <textarea id="message" name="message" rows="5" placeholder="ご用件をお書きください" required></textarea>
+            </div>
 
-<div class="section" id="weather">
-  <h2>天気予報アプリ</h2>
-  <div class="weather-ui">
-    <input id="city" type="text" placeholder="都市名を入力（例: Tokyo / Osaka / Sapporo）">
-    <button id="getWeather" type="button">検索</button>
-  </div>
-  <div id="result" class="weather-result"></div>
-</div>
-
-
-
-  </div>
-</div>
-
-<!-- お問い合わせセクション（静的サイト用：mailto） -->
-<div class="section" id="contact">
-  <h2>お問い合わせ</h2>
-
-  <form class="contact-form" action="https://formspree.io/f/mblapgjd" method="POST">
-    <div class="form-row">
-      <label for="name">お名前</label>
-      <input id="name" name="name" type="text" placeholder="山田 太郎" required />
-    </div>
-    <div class="form-row">
-      <label for="email">メール</label>
-      <input id="email" name="email" type="email" placeholder="you@example.com" required />
-    </div>
-    <div class="form-row">
-      <label for="message">メッセージ</label>
-      <textarea id="message" name="message" rows="5" placeholder="ご用件をお書きください" required></textarea>
-    </div>
-
-    <div class="form-actions">
-      <button type="submit">送信する</button>
-      <small class="form-note">※ 送信後はあなたのメールに届きます</small>
-    </div>
-
-  </form>
-</div>
+            <div class="form-actions">
+              <button type="submit">送信する</button>
+              <small class="form-note">※ 送信後はあなたのメールに届きます</small>
+            </div>
+          </form>
+        </div>
+      </div><!-- /.card -->
+    </div><!-- /.container -->
   </main>
 
-  <!-- 既存の main.js を使う。なければ下の最小スクリプトを参考に -->
-  <script src="main.js"></script>
+  <!-- ✅ フッター -->
+  <footer>
+    <p>© ここがフッターだよ！</p>
+    <div class="social-links">
+      <a href="https://github.com/yuuta5625" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+      <a href="#" target="_blank" rel="noopener">
+        <i class="fab fa-x-twitter"></i>
+      </a>
+      <a href="#" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </div>
+  </footer>
 
-  <!-- ✅ フッター（最下部） -->
-<footer>
-  <p>© ここがフッターだよ！</p>
-  <div class="social-links">
-    <a href="https://github.com/yuuta5625" target="_blank" rel="noopener">
-      <i class="fab fa-github"></i>
-    </a>
-    <a href="#" target="_blank" rel="noopener">
-      <i class="fab fa-x-twitter"></i>
-    </a>
-    <a href="#" target="_blank" rel="noopener">
-      <i class="fab fa-linkedin"></i>
-    </a>
-  </div>
-</footer>
-
+  <!-- ====== JS（ページ末尾） ====== -->
+  <script src="main.js" defer></script>
 </body>
 </html>
