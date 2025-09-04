@@ -322,3 +322,14 @@ p {
     border-width: 3px; /* 枠を少し太めに */
   }
 }
+.skills-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .skills-list {
+    grid-template-columns: 1fr; /* スマホは1列 */
+  }
+}

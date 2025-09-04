@@ -10,6 +10,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
+<script>
+  const apiKey = "84a212e7221718ce1d2a784483127e2c";
+
+  document.getElementById("getWeather").addEventListener("click", () => {
+    const city = document.getElementById("city").value;
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=ja`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("result").innerHTML = `
+          <p>${data.name} の天気</p>
+          <p>${data.weather[0].description} (${data.main.temp}℃)</p>
+        `;
+      })
+      .catch(() => {
+        document.getElementById("result").innerHTML = "<p>都市名が正しくありません</p>";
+      });
+  });
+</script>
+
 <body>
   <!-- ✅ ヘッダー（そのまま使える） -->
   <header>
@@ -69,15 +88,14 @@
 
         <!-- 追加セクション（空でもOK。ナビのリンク先になる） -->
          <!-- スキル一覧 -->
-<div class="section" id="skills">
-  <h2>スキル</h2>
-  <ul class="skills-list">
-    <li>HTML / CSS / JavaScript</li>
-    <li>Git / GitHub</li>
-    <li>React（学習中）</li>
-    <li>Figma（デザインツール）</li>
-  </ul>
-</div>
+<ul class="skills-list">
+  <li>HTML5 / CSS3（最新仕様に対応）</li>
+  <li>JavaScript（基礎） / React（学習中）</li>
+  <li>Git / GitHub（バージョン管理）</li>
+  <li>Figma（デザインツール）</li>
+  <li>Adobe Premiere Pro（動画編集）</li>
+</ul>
+
 
        <!-- 作品セクション -->
 <div class="section" id="works">
@@ -117,6 +135,13 @@
     <a class="link-btn" href="#" target="_blank" rel="noopener">詳しく</a>
   </div>
 </article>
+<div class="section" id="weather">
+  <h2>天気予報アプリ</h2>
+  <input type="text" id="city" placeholder="都市名を入力">
+  <button id="getWeather">検索</button>
+  <div id="result"></div>
+</div>
+
 
   </div>
 </div>
