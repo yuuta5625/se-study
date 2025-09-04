@@ -11,23 +11,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <script>
-  const apiKey = "84a212e7221718ce1d2a784483127e2c";
+(() => {
+  const apiKey = "84a212e7221718ce1d2a784483127e2c"; // ←あなたのキー
+  const cityEl = document.getElementById("city");
+  const btnEl  = document.getElementById("getWeather");
+  const outEl  = document.getElementById("result");
 
-  document.getElementById("getWeather").addEventListener("click", () => {
-    const city = document.getElementById("city").value;
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=ja`)
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("result").innerHTML = `
-          <p>${data.name} の天気</p>
-          <p>${data.weather[0].description} (${data.main.temp}℃)</p>
-        `;
-      })
-      .catch(() => {
-        document.getElementById("result").innerHTML = "<p>都市名が正しくありません</p>";
-      });
+  const showError = (msg) => {
+    outEl.innerHTML = `<p style="color:#c00;">${msg}</p>`;
+  };
+
+  const render = (d) => {
+    const icon = d.weather?.[0]?.icon
+      ? `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`
+      : "";
+    outEl.innerHTML = `
+      <div class="weather-card">
+        <div class="left">
+          <h3>${d.name} の天気</h3>
+          <p>${d.weather[0].description} ／ 体感 ${Math.round(d.main.feels_like)}℃</p>
+          <p>気温: <strong>${Math.round(d.main.temp)}℃</strong>（最高 ${Math.round(d.main.temp_max)}℃ / 最低 ${Math.round(d.main.temp_min)}℃）</p>
+          <p>湿度: ${d.main.humidity}%　風速: ${d.wind.speed}m/s</p>
+        </div>
+        ${icon ? `<img src="${icon}" alt="icon" width="80" height="80">` : ""}
+      </div>`;
+  };
+
+  btnEl.addEventListener("click", async () => {
+    const city = cityEl.value.trim();
+    if (!city) {
+      showError("都市名を入力してください（例: Tokyo）");
+      return;
+    }
+    outEl.innerHTML = "<p>読み込み中...</p>";
+
+    try {
+      const url =
+        `https://api.openweathermap.org/data/2.5/weather` +
+        `?q=${encodeURIComponent(city)}` +
+        `&appid=${apiKey}` +
+        `&units=metric&lang=ja`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (!res.ok) {
+        // 代表的なエラーを分岐
+        if (data.cod === 401) {
+          showError("APIキーが無効か、まだ有効化されていない可能性があります（発行直後は反映に時間がかかることがあります）。");
+        } else if (data.cod === "404" || data.cod === 404) {
+          showError("都市が見つかりませんでした。英語表記で試してください（例: Tokyo / Osaka / Sapporo）。");
+        } else {
+          showError(`エラー: ${data.message || "取得に失敗しました"}`);
+        }
+        return;
+      }
+
+      render(data);
+    } catch (e) {
+      showError("通信に失敗しました。ネットワーク状況をご確認ください。");
+    }
   });
+})();
 </script>
+
 
 <body>
   <!-- ✅ ヘッダー（そのまま使える） -->
@@ -135,12 +182,16 @@
     <a class="link-btn" href="#" target="_blank" rel="noopener">詳しく</a>
   </div>
 </article>
+
 <div class="section" id="weather">
   <h2>天気予報アプリ</h2>
-  <input type="text" id="city" placeholder="都市名を入力">
-  <button id="getWeather">検索</button>
-  <div id="result"></div>
+  <div class="weather-ui">
+    <input id="city" type="text" placeholder="都市名を入力（例: Tokyo / Osaka / Sapporo）">
+    <button id="getWeather" type="button">検索</button>
+  </div>
+  <div id="result" class="weather-result"></div>
 </div>
+
 
 
   </div>

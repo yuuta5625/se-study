@@ -333,3 +333,16 @@ p {
     grid-template-columns: 1fr; /* スマホは1列 */
   }
 }
+.weather-ui {
+  display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 12px;
+}
+.weather-ui input {
+  flex: 1 1 220px;
+  border: 1px solid #ddd; border-radius: 10px; padding: 10px 12px;
+}
+.weather-result .weather-card {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card); border: 1px solid #eee; border-radius: 12px;
+  padding: 12px; box-shadow: 0 6px 14px rgba(0,0,0,.06);
+}
+.weather-card .left { flex: 1; }
