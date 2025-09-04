@@ -325,3 +325,30 @@ p { margin: 0 0 0.5em; }
   font-size: 14px;
   background: #fafafa;
 }
+/* ====== 天気カードを 1 カラムに強制（中央揃え） ====== */
+.weather-result .weather-card {
+  display: grid !important;          /* 旧: flex/grid 2カラム を打ち消す */
+  grid-template-columns: 1fr !important;
+  justify-items: center;             /* 中央揃え（横方向） */
+  row-gap: 12px;
+  text-align: center;                /* 地名＆説明のテキストも中央に */
+  padding: 16px;                     /* 少し広めに */
+  column-gap: 0 !important;          /* 旧指定のカラム間隔を無効化 */
+}
+
+/* 上段（地名＋説明）と気温は、カードの真ん中で2列横並び＆中央揃え */
+.weather-top {
+  display: grid;
+  grid-auto-flow: column;            /* 横方向に並べる（2列） */
+  align-items: center;
+  justify-content: center;           /* セット全体を中央へ */
+  gap: 40px;                         /* 地名と気温の間隔 */
+}
+
+/* チップ群は下段で中央寄せ横並び */
+.weather-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 12px;
+}
