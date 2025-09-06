@@ -352,3 +352,134 @@ p { margin: 0 0 0.5em; }
   justify-content: center;
   gap: 8px 12px;
 }
+.weather-ui {
+  display: flex;
+  flex-direction: column; /* 縦並びにする */
+  gap: 12px;              /* 入力欄とボタンの間に余白 */
+  max-width: 300px;       /* 横幅を制限して中央寄せしやすく */
+  margin: 0 auto;         /* 中央寄せ */
+}
+
+.weather-ui input,
+.weather-ui button {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.weather-result {
+  margin-top: 20px;
+  text-align: center;
+}
+/* 全体を中央揃え */
+#weather {
+  text-align: center;
+}
+
+.weather-ui {
+  display: flex;
+  flex-direction: column;  /* 縦並び */
+  gap: 12px;
+  max-width: 300px;
+  margin: 0 auto;          /* 中央寄せ */
+}
+
+.weather-ui input,
+.weather-ui button {
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;      /* 入力文字も中央揃え */
+}
+
+.weather-result {
+  margin-top: 20px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.weather-result img {
+  display: block;
+  margin: 10px auto;       /* アイコンを中央寄せ */
+}
+/* ==== 天気結果の中央寄せ・最終上書き ==== */
+#weather, 
+#weather .weather-result,
+#weather .weather-card,
+#weather .weather-headings,
+#weather .weather-stats {
+  text-align: center !important;
+}
+
+#weather .weather-result {
+  display: grid;               /* 中央寄せしやすい */
+  justify-items: center !important;
+  align-items: start;
+  gap: 12px;
+}
+
+#weather .weather-card {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  justify-items: center !important;
+  row-gap: 12px;
+  column-gap: 0 !important;
+  padding: 16px;
+}
+
+#weather .weather-top {
+  display: grid !important;
+  grid-auto-flow: column;
+  justify-content: center !important;
+  align-items: center;
+  gap: 40px;
+}
+
+#weather .weather-stats {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: center !important;  /* ここが左寄せの原因になりがち */
+  gap: 8px 12px;
+}
+
+#weather .weather-result img {
+  display: block;
+  margin: 10px auto;
+}
+/* ==== 天気：検索結果の中央寄せ（最終上書き） ==== */
+#weather .weather-result {
+  /* 親を中央寄せ用のグリッドにして中身を中央へ */
+  display: grid !important;
+  place-items: start center !important; /* 縦はstart、横はcenter */
+  text-align: center !important;
+  gap: 12px !important;
+}
+
+/* 中のカード自体も中央に固定＆中央テキスト */
+#weather .weather-result > * {
+  margin-inline: auto !important;      /* 左右オートで中央配置 */
+  text-align: center !important;
+}
+
+/* カードの内部で左寄せになる要素を一括矯正 */
+#weather .weather-card,
+#weather .weather-top,
+#weather .weather-headings,
+#weather .weather-stats,
+#weather .weather-card p,
+#weather .weather-card h3,
+#weather .weather-card img {
+  text-align: center !important;
+}
+
+/* ステータスの並び（過去指定の flex-start を潰す） */
+#weather .weather-stats {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 8px 12px !important;
+}
+
+/* アイコンの中央寄せ */
+#weather .weather-result img {
+  display: block !important;
+  margin: 10px auto !important;
+}

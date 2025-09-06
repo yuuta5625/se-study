@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>天気予報アプリ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- フォント & アイコン -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- 共通CSSを読み込み -->
+  <link rel="stylesheet" href="../style.css?v=5">
+  <style>
+  /* === weather-app 専用：検索結果をぜんぶ中央寄せに固定 === */
+  #weather { text-align: center !important; }
+
+  #weather .weather-result {
+    display: grid !important;
+    place-items: start center !important; /* 縦:上揃え / 横:中央 */
+    text-align: center !important;
+    gap: 12px !important;
+    margin: 20px auto !important;
+    max-width: 680px; /* お好みで */
+  }
+
+  /* 結果ブロック直下の要素を中央に */
+  #weather .weather-result > * {
+    margin-inline: auto !important;
+    text-align: center !important;
+  }
+
+  /* カード系の内側で左寄せを打ち消す */
+  #weather .weather-card,
+  #weather .weather-top,
+  #weather .weather-main,
+  #weather .weather-headings,
+  #weather .weather-stats,
+  #weather .weather-card h3,
+  #weather .weather-card p {
+    text-align: center !important;
+  }
+
+  /* チップ類（flex-start を確実に無効化） */
+  #weather .weather-stats {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px 12px !important;
+  }
+
+  /* アイコンの中央寄せ */
+  #weather .weather-result img {
+    display: block !important;
+    margin: 10px auto !important;
+  }
+</style>
+
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <h1 class="site-title">天気予報アプリ</h1>
+      <nav>
+        <a href="../index.html">← ポートフォリオへ戻る</a>
+      </nav>
+    </div>
+  </header>
+
+<main>
+  <section class="section" id="weather">
+    <h2>都市を入力して検索</h2>
+
+    <div class="weather-ui">
+      <input id="city" type="text" placeholder="Tokyo / Osaka / Sapporo">
+      <button id="getWeather" type="button">検索</button>
+      <button id="useGeoloc" type="button" aria-label="現在地で検索">現在地</button>
+    </div>
+
+    <div id="result" class="weather-result">
+      <!-- 検索結果（都市名・気温・天気アイコン）がここに表示されます -->
+    </div>
+  </section>
+</main>
+
+
+
+  <footer>
+    <p>© 2025 内山雄大 | 天気予報アプリ</p>
+  </footer>
+
+  <!-- 共通JSを読み込み -->
+  <script src="../main.js" defer></script>
+</body>
+</html>

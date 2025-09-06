@@ -11,129 +11,163 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================
-// ハンバーガーメニュー
+/* ハンバーガーメニュー */
 // =========================
-const navToggle = document.querySelector('.nav-toggle');
-const globalNav = document.getElementById('global-nav');
+(() => {
+  const navToggle = document.querySelector(".nav-toggle");
+  const globalNav = document.getElementById("global-nav");
+  if (!navToggle || !globalNav) return;
 
-if (navToggle && globalNav) {
-  navToggle.addEventListener('click', () => {
-    const isOpen = globalNav.classList.toggle('open');
-    navToggle.setAttribute('aria-expanded', String(isOpen));
+  navToggle.addEventListener("click", () => {
+    const isOpen = globalNav.classList.toggle("open");
+    navToggle.setAttribute("aria-expanded", String(isOpen));
   });
 
-  globalNav.addEventListener('click', (e) => {
-    if (e.target.closest('a')) {
-      globalNav.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
+  globalNav.addEventListener("click", (e) => {
+    if (e.target.closest("a")) {
+      globalNav.classList.remove("open");
+      navToggle.setAttribute("aria-expanded", "false");
     }
   });
 
-  const mq = window.matchMedia('(min-width: 769px)');
-  mq.addEventListener?.('change', (e) => {
+  const mq = window.matchMedia("(min-width: 769px)");
+  mq.addEventListener?.("change", (e) => {
     if (e.matches) {
-      globalNav.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
+      globalNav.classList.remove("open");
+      navToggle.setAttribute("aria-expanded", "false");
     }
   });
-}
+})();
 
 // =========================
-// スムーススクロール
+/* スムーススクロール（同一ページ内のみ） */
 // =========================
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', (e) => {
-    const id = a.getAttribute('href').slice(1);
-    const el = document.getElementById(id);
-    if (!el) return;
-    e.preventDefault();
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    history.pushState(null, '', `#${id}`);
+(() => {
+  document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener("click", (e) => {
+      const id = a.getAttribute("href").slice(1);
+      const el = document.getElementById(id);
+      if (!el) return;
+      e.preventDefault();
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.pushState(null, "", `#${id}`);
+    });
   });
-});
+})();
 
 // =========================
-// 天気アプリ
+/* 天気アプリ（日本語地名OK：ジオコーディング→天気） */
 // =========================
-const apiKey = "84a212e7221718ce1d2a784483127e2c";
-const cityEl = document.getElementById("city");
-const btnEl  = document.getElementById("getWeather");
-const outEl  = document.getElementById("result");
+(() => {
+  const API_KEY = "84a212e7221718ce1d2a784483127e2c"; // ← あなたのキー
+  const cityEl = document.getElementById("city");
+  const btnEl  = document.getElementById("getWeather");
+  const outEl  = document.getElementById("result");
+  if (!cityEl || !btnEl || !outEl) return;
 
-const showError = (msg) => {
-  outEl.style.display = "block";
-  outEl.innerHTML = `<p style="color:#c00;">${msg}</p>`;
-};
+  let reqSeq = 0;
 
-const render = (d) => {
-  const icon = d.weather?.[0]?.icon
-    ? `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`
-    : "";
-  const desc = d.weather?.[0]?.description || "";
+  const show = (html) => {
+    outEl.style.display = "block";
+    outEl.innerHTML = html;
+    outEl.firstElementChild?.classList.add("fade-in"); // ← フェードイン適用（任意）
+  };
 
-  outEl.style.display = "block";
-  outEl.innerHTML = `
-    <div class="weather-card">
-      <div class="weather-top">
-        <div class="weather-info">
-          <span class="city">${d.name}</span>
-          <span class="desc">（${desc}）</span>
+  // 全角スペース等を軽く整える（日本語入力のケア）
+  const normalizeInput = (s) =>
+    s.replace(/\u3000/g, " ")       // 全角スペース→半角
+     .replace(/\s+/g, " ")          // 連続スペース圧縮
+     .trim();
+
+  const render = (d) => {
+    const icon = d.weather?.[0]?.icon
+      ? `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`
+      : "";
+    const desc = d.weather?.[0]?.description || "";
+
+    show(`
+      <div class="weather-card">
+        <div class="weather-top">
+          <div class="weather-headings">
+            <div class="city">${d.name}</div>
+            <div class="desc">${desc}</div>
+          </div>
+          <div class="temp">${Math.round(d.main.temp)}<span class="unit">℃</span></div>
         </div>
-        <div class="temp">
-          ${Math.round(d.main.temp)}<span class="unit">℃</span>
+        ${icon ? `<img class="weather-icon" src="${icon}" alt="${desc}">` : ""}
+        <div class="weather-stats">
+          <span class="stat">体感 ${Math.round(d.main.feels_like)}℃</span>
+          <span class="stat">最高 ${Math.round(d.main.temp_max)}℃</span>
+          <span class="stat">最低 ${Math.round(d.main.temp_min)}℃</span>
+          <span class="stat">湿度 ${d.main.humidity}%</span>
+          <span class="stat">風 ${Math.round(d.wind.speed)} m/s</span>
+          ${d.clouds?.all != null ? `<span class="stat">雲量 ${d.clouds.all}%</span>` : ""}
+          ${d.main?.pressure ? `<span class="stat">気圧 ${d.main.pressure} hPa</span>` : ""}
         </div>
       </div>
+    `);
+  };
 
-      <div class="weather-stats">
-        <span class="stat">体感 ${Math.round(d.main.feels_like)}℃</span>
-        <span class="stat">最高 ${Math.round(d.main.temp_max)}℃</span>
-        <span class="stat">最低 ${Math.round(d.main.temp_min)}℃</span>
-        <span class="stat">湿度 ${d.main.humidity}%</span>
-        <span class="stat">風 ${d.wind.speed} m/s</span>
-        ${d.clouds?.all != null ? `<span class="stat">雲量 ${d.clouds.all}%</span>` : ""}
-        ${d.main?.pressure ? `<span class="stat">気圧 ${d.main.pressure} hPa</span>` : ""}
-      </div>
-    </div>`;
-};
-
-if (btnEl) {
-  btnEl.addEventListener("click", async () => {
-    const city = cityEl.value.trim();
-    if (!city) {
-      showError("都市名を入力してください（例: Tokyo）");
+  async function fetchWeather() {
+    const raw = cityEl.value;
+    const q = normalizeInput(raw);
+    if (!q) {
+      show(`<p style="color:#c00;">都市名を入力してください（例: 東京 / 大阪 / 札幌）</p>`);
       return;
     }
-    outEl.innerHTML = "<p>読み込み中...</p>";
+
+    const mySeq = ++reqSeq;
+    show("検索中…");
 
     try {
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric&lang=ja`;
-      const res = await fetch(url);
-      const data = await res.json();
+      // 1) ジオコーディング（日本語OK）
+      const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(q)}&limit=1&appid=${API_KEY}`;
+      const geoRes = await fetch(geoUrl);
+      const geo = await geoRes.json();
 
-      if (!res.ok) {
-        showError(`エラー: ${data.message || "取得に失敗しました"}`);
+      if (mySeq !== reqSeq) return; // 古い結果は破棄
+
+      if (!Array.isArray(geo) || geo.length === 0) {
+        show(`<p>都市が見つかりませんでした：「${q}」</p>`);
         return;
       }
-      render(data);
+
+      const { lat, lon, name, country, state } = geo[0];
+
+      // 2) 緯度経度で天気を取得（lang=jaで日本語の天気説明）
+      const wxUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=ja`;
+      const wxRes = await fetch(wxUrl);
+      const data = await wxRes.json();
+
+      if (mySeq !== reqSeq) return;
+
+      if (String(data.cod) === "200") {
+        // 表示名をローカライズ気味に
+        data.name = [name, state, country].filter(Boolean).join(", ");
+        render(data);
+      } else {
+        show(`<p>天気情報の取得に失敗しました</p>`);
+      }
     } catch (e) {
-      showError("通信に失敗しました。ネットワーク状況をご確認ください。");
+      if (mySeq !== reqSeq) return;
+      console.error(e);
+      show(`<p>エラーが発生しました</p>`);
+    }
+  }
+
+  btnEl.addEventListener("click", fetchWeather, { passive: true });
+  cityEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      fetchWeather();
     }
   });
-}
-
-// =========================
-// デモボタン到着演出
-// =========================
-const demoBtn   = document.getElementById('demoWeatherBtn');
-const weatherEl = document.getElementById('weather');
-const inputEl   = document.getElementById('city');
-
-if (demoBtn && weatherEl) {
-  demoBtn.addEventListener('click', () => {
-    setTimeout(() => {
-      weatherEl.classList.add('demo-pulse');
-      inputEl?.focus();
-      setTimeout(() => weatherEl.classList.remove('demo-pulse'), 1300);
-    }, 300);
-  });
-}
+})();
+const btnGeo = document.getElementById('useGeoloc');
+btnGeo?.addEventListener('click', () => {
+  if (!navigator.geolocation) return renderError('この端末では位置情報が使えません');
+  navigator.geolocation.getCurrentPosition(
+    pos => fetchWeatherByCoords(pos.coords.latitude, pos.coords.longitude),
+    () => renderError('位置情報の取得が拒否されました')
+  );
+});
