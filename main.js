@@ -56,29 +56,26 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 
 // =========================
-/* 天気アプリ（日本語地名OK：ジオコーディング→天気） */
+/* 天気アプリ（日本語地名OK：ジオコーディング→天気＋現在地対応） */
 // =========================
 (() => {
   const API_KEY = "84a212e7221718ce1d2a784483127e2c"; // ← あなたのキー
   const cityEl = document.getElementById("city");
   const btnEl  = document.getElementById("getWeather");
   const outEl  = document.getElementById("result");
-  if (!cityEl || !btnEl || !outEl) return;
+  const btnGeo = document.getElementById("useGeoloc"); // ★ 追加
+  if (!outEl) return; // 天気ページ以外では何もしない
 
   let reqSeq = 0;
 
   const show = (html) => {
     outEl.style.display = "block";
     outEl.innerHTML = html;
-    outEl.firstElementChild?.classList.add("fade-in"); // ← フェードイン適用（任意）
+    outEl.firstElementChild?.classList.add("fade-in");
   };
+  const renderError = (msg) => show(`<p class="error" role="alert" style="color:#c00;">${msg}</p>`);
 
-  // 全角スペース等を軽く整える（日本語入力のケア）
-  const normalizeInput = (s) =>
-    s.replace(/\u3000/g, " ")       // 全角スペース→半角
-     .replace(/\s+/g, " ")          // 連続スペース圧縮
-     .trim();
-
+  // 表示
   const render = (d) => {
     const icon = d.weather?.[0]?.icon
       ? `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`
@@ -108,66 +105,92 @@ document.addEventListener("DOMContentLoaded", () => {
     `);
   };
 
+  // 全角スペース等を軽く整える（日本語入力のケア）
+  const normalizeInput = (s) =>
+    s.replace(/\u3000/g, " ").replace(/\s+/g, " ").trim();
+
+  // ★ 都市名から検索（既存）
   async function fetchWeather() {
-    const raw = cityEl.value;
+    const raw = cityEl?.value ?? "";
     const q = normalizeInput(raw);
-    if (!q) {
-      show(`<p style="color:#c00;">都市名を入力してください（例: 東京 / 大阪 / 札幌）</p>`);
-      return;
-    }
+    if (!q) return renderError("都市名を入力してください（例: 東京 / 大阪 / 札幌）");
 
     const mySeq = ++reqSeq;
     show("検索中…");
 
     try {
-      // 1) ジオコーディング（日本語OK）
+      // 1) ジオコーディング
       const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(q)}&limit=1&appid=${API_KEY}`;
       const geoRes = await fetch(geoUrl);
       const geo = await geoRes.json();
-
-      if (mySeq !== reqSeq) return; // 古い結果は破棄
+      if (mySeq !== reqSeq) return;
 
       if (!Array.isArray(geo) || geo.length === 0) {
-        show(`<p>都市が見つかりませんでした：「${q}」</p>`);
-        return;
+        return renderError(`都市が見つかりませんでした：「${q}」`);
       }
 
       const { lat, lon, name, country, state } = geo[0];
 
-      // 2) 緯度経度で天気を取得（lang=jaで日本語の天気説明）
+      // 2) 天気
       const wxUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=ja`;
       const wxRes = await fetch(wxUrl);
       const data = await wxRes.json();
-
       if (mySeq !== reqSeq) return;
 
       if (String(data.cod) === "200") {
-        // 表示名をローカライズ気味に
         data.name = [name, state, country].filter(Boolean).join(", ");
         render(data);
       } else {
-        show(`<p>天気情報の取得に失敗しました</p>`);
+        renderError("天気情報の取得に失敗しました");
       }
     } catch (e) {
       if (mySeq !== reqSeq) return;
       console.error(e);
-      show(`<p>エラーが発生しました</p>`);
+      renderError("エラーが発生しました");
     }
   }
 
-  btnEl.addEventListener("click", fetchWeather, { passive: true });
-  cityEl.addEventListener("keydown", (e) => {
+  // ★ 追加：現在地から検索
+  async function fetchWeatherByCoords(lat, lon) {
+    const mySeq = ++reqSeq;
+    show("現在地から取得中…");
+    try {
+      const wxUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=ja`;
+      const wxRes = await fetch(wxUrl);
+      const data = await wxRes.json();
+      if (mySeq !== reqSeq) return;
+
+      if (String(data.cod) === "200") {
+        render(data);
+      } else {
+        renderError("現在地の天気取得に失敗しました");
+      }
+    } catch (e) {
+      if (mySeq !== reqSeq) return;
+      console.error(e);
+      renderError("現在地の取得でエラーが発生しました");
+    }
+  }
+
+  // イベント登録
+  btnEl?.addEventListener("click", fetchWeather, { passive: true });
+  cityEl?.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       fetchWeather();
     }
   });
+
+  // ★ 現在地ボタン（IIFEの中に入れる！）
+  btnGeo?.addEventListener("click", () => {
+    if (!navigator.geolocation) return renderError("この端末では位置情報が使えません");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => fetchWeatherByCoords(pos.coords.latitude, pos.coords.longitude),
+      (err) => {
+        console.error(err);
+        renderError("位置情報の取得が拒否/失敗しました");
+      },
+      { enableHighAccuracy: false, timeout: 10000 }
+    );
+  });
 })();
-const btnGeo = document.getElementById('useGeoloc');
-btnGeo?.addEventListener('click', () => {
-  if (!navigator.geolocation) return renderError('この端末では位置情報が使えません');
-  navigator.geolocation.getCurrentPosition(
-    pos => fetchWeatherByCoords(pos.coords.latitude, pos.coords.longitude),
-    () => renderError('位置情報の取得が拒否されました')
-  );
-});
