@@ -555,3 +555,17 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   outline: 3px solid rgba(58,123,213,.45);
   outline-offset: 2px;
 }
+.cs-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center; /* ← これを追加！中央揃え */
+  margin-top: 12px;
+}
+.cs-actions .link-btn {
+  flex: 1 1 200px;       /* 横に広がる（200px以上で揃う） */
+  text-align: center;
+  padding: 8px 0;        /* 縦の余白を小さめに */
+  font-size: 16px;
+  border-radius: 8px;
+}

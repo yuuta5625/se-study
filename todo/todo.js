@@ -12,11 +12,34 @@
   let items = load();
   let filter = 'all'; // 'all' | 'active' | 'done'
 
-  // ---- init ----
-  render();
-  input?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') add();
-  });
+// ---- init ----
+render();
+
+// IME用の明示フラグ
+let composing = false;
+input?.addEventListener('compositionstart', () => { composing = true; });
+input?.addEventListener('compositionend',   () => { composing = false; });
+
+// Enterで追加：IME変換中は無視（堅牢版）
+input?.addEventListener('keydown', (e) => {
+  // IME中 or keyCode229（古い実装）なら何もしない
+  if (composing || e.isComposing || e.keyCode === 229) return;
+
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    add();
+  }
+});
+
+// 念のためのフォールバック（いらなければ削ってOK）
+input?.addEventListener('keyup', (e) => {
+  if (composing || e.isComposing || e.keyCode === 229) return;
+  // keyupでEnterを拾いたいケースがあるならここでadd()しても良いが、
+  // 二重発火を避けるため通常は何もしない。
+});
+
+addBtn?.addEventListener('click', add);
+
   addBtn?.addEventListener('click', add);
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
