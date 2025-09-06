@@ -529,12 +529,29 @@ p { margin: 0 0 0.5em; }
 }
 #useGeoloc:hover { opacity: .9; }
 
-/* PC時に検索UIを横並びにしたい場合（任意） */
-@media (min-width: 769px) {
-  #weather .weather-ui {
-    display: grid;
-    grid-template-columns: 1fr auto auto;  /* 入力 + 検索 + 現在地 */
-    gap: 8px;
-    max-width: 540px;
-  }
+/* 検索UIは常に縦並び */
+#weather .weather-ui {
+  display: flex;
+  flex-direction: column; /* 縦並び */
+  gap: 12px;
+  max-width: 300px;
+  margin: 0 auto;         /* 真ん中寄せ */
+}
+
+#weather .weather-ui input,
+#weather .weather-ui button {
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+}
+/* ToDo：ボタンの見た目を既存に合わせる */
+.filter-btn { appearance: none; border:1px solid #ddd; background:#fff; color:#333; padding:8px 12px; border-radius:10px; cursor:pointer; }
+.filter-btn[aria-pressed="true"] { background: var(--accent); color:#fff; border-color: var(--accent); }
+.todo-actions .todo-del { appearance:none; border:1px solid #eee; background:#fafafa; color:#333; padding:6px 10px; border-radius:10px; cursor:pointer; }
+.todo-actions .todo-del:hover { background:#f0f0f0; }
+
+/* 共通：キーボード操作のフォーカスリングを強調 */
+button:focus-visible, a:focus-visible, input:focus-visible {
+  outline: 3px solid rgba(58,123,213,.45);
+  outline-offset: 2px;
 }

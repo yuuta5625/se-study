@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>天気予報アプリ – ケーススタディ | 内山 雄大</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="OpenWeather API を用いた天気予報アプリのケーススタディ。要件定義・実装・品質改善・学びをまとめました。" />
+
+  <!-- 既存の共通CSSを再利用 -->
+  <link rel="stylesheet" href="../style.css?v=6" />
+
+  <!-- ページ内限定の軽い追加スタイル（衝突回避のためスコープ付き） -->
+  <style>
+    .cs-container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    .cs-crumbs { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+    .cs-crumbs a { color: var(--accent); text-decoration: none; }
+    .cs-hero { background: var(--card); border-radius: 16px; padding: 24px; box-shadow: 0 8px 24px rgba(0,0,0,.06); }
+    .cs-hero h1 { margin: 0 0 8px; }
+    .cs-meta { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-top:12px; }
+    .cs-tag { font-size: 13px; background:#f4f6fb; border:1px solid #e6ebf5; padding:8px 10px; border-radius:10px; }
+    .cs-section { margin-top: 28px; background: var(--card); border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,.05); }
+    .cs-section h2 { margin: 0 0 12px; font-size: 22px; }
+    .cs-grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+    .cs-fig { border:1px solid #eee; border-radius:12px; overflow:hidden; background:#fff; }
+    .cs-fig img { width:100%; display:block; }
+    .cs-fig figcaption { font-size: 13px; color: var(--muted); padding: 8px 10px; background:#fafafa; }
+    .cs-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top: 12px; }
+    .cs-kpi { display:grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap:12px; }
+    .cs-kpi .card { padding:14px; text-align:center; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    @media (max-width: 800px){ .cs-grid-2 { grid-template-columns: 1fr; } }
+  </style>
+
+  <!-- 構造化データ（Person + Project） -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"CreativeWork",
+    "name":"天気予報アプリ",
+    "description":"OpenWeather API を用いた天気予報アプリのケーススタディ。",
+    "url":"../weather-app/index.html",
+    "image":"../assets/weather-app.jpg",
+    "creator":{
+      "@type":"Person",
+      "name":"内山 雄大",
+      "url":"../index.html"
+    },
+    "programmingLanguage":["HTML","CSS","JavaScript"],
+    "about":"Geolocation / API連携 / エラー・ローディング・キャッシュの実装"
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <a class="site-title" href="../index.html" style="text-decoration:none">← 作品一覧へ</a>
+      <nav id="global-nav"></nav>
+    </div>
+  </header>
+
+  <main id="main" class="cs-container">
+    <p class="cs-crumbs"><a href="../index.html#works">作品</a> / 天気予報アプリ</p>
+
+    <section class="cs-hero">
+      <h1>天気予報アプリ – ケーススタディ</h1>
+      <p class="subtitle">現在地/都市名から現在の天気を取得。学習目的にAPI連携・エラーハンドリング・UI改善を実装。</p>
+      <div class="cs-meta">
+        <div class="cs-tag"><strong>役割</strong><br>個人開発（設計・実装・デザイン）</div>
+        <div class="cs-tag"><strong>期間</strong><br>2025年9月（約2日）</div>
+        <div class="cs-tag"><strong>技術</strong><br>HTML / CSS / JavaScript / OpenWeather API</div>
+        <div class="cs-tag"><strong>URL</strong><br><a href="../weather-app/index.html" target="_blank" rel="noopener">デモを見る</a> / <a href="https://github.com/yuuta5625/weather-app" target="_blank" rel="noopener">ソース</a></div>
+      </div>
+      <div class="cs-actions">
+        <a class="link-btn" href="../weather-app/index.html" target="_blank" rel="noopener">デモを見る</a>
+        <a class="link-btn" href="https://github.com/yuuta5625/weather-app" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </section>
+
+    <section class="cs-section" id="background">
+      <h2>背景 / 目的</h2>
+      <ul>
+        <li>フロントエンドの基礎（DOM操作・非同期処理・Fetch API）の定着。</li>
+        <li>ブラウザ機能（Geolocation）を使った体験の設計。</li>
+        <li>学習用でも<strong>実務で見られる配慮</strong>（ローディング、エラー、レスポンシブ、アクセシビリティ）を反映。</li>
+      </ul>
+    </section>
+
+    <section class="cs-section" id="goals">
+      <h2>目標と評価指標</h2>
+      <div class="cs-kpi">
+        <div class="card"><strong>成功基準</strong><br>都市/現在地いずれも天気を取得できる</div>
+        <div class="card"><strong>UX</strong><br>状態が分かる（検索中/エラー/空）</div>
+        <div class="card"><strong>速度</strong><br>初回表示 LCP 2.5s 以内（静的配信）</div>
+        <div class="card"><strong>保守</strong><br>関数分離で再利用可（都市検索/座標検索）</div>
+      </div>
+    </section>
+
+    <section class="cs-section" id="implementation">
+      <h2>実装ハイライト</h2>
+      <div class="cs-grid-2">
+        <div>
+          <ul>
+            <li>OpenWeather の <span class="mono">/geo/1.0/direct</span> で地名⇒座標、<span class="mono">/data/2.5/weather</span> で天気取得。</li>
+            <li>現在地ボタン：Geolocation API 許可→座標→天気表示。</li>
+            <li>UI状態：<code class="mono">.loading</code> スピナー、<code class="mono">.error</code> アラート、空入力のバリデーション。</li>
+            <li>入力の正規化：全角スペース・連続スペースの吸収。</li>
+            <li>競合抑止：連打時に古いレスポンスを破棄（リクエスト番号 <span class="mono">reqSeq</span>）。</li>
+            <li>レスポンシブ：検索UIは縦並び、結果カードは中央揃え。</li>
+          </ul>
+        </div>
+        <figure class="cs-fig">
+          <img src="../assets/weather-app.jpg" alt="天気アプリの画面キャプチャ（検索と現在地取得）" width="1280" height="720" loading="lazy" />
+          <figcaption>UI：検索入力 / 検索 / 現在地 / 結果カード</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="cs-section" id="quality">
+      <h2>品質・アクセシビリティ</h2>
+      <ul>
+        <li>読み込み・エラー・空状態の明示で「今なにが起きているか」を表示。</li>
+        <li>キーボード操作対応（Enterで検索、ボタンは標準のフォーカスリング）。</li>
+        <li>画像に代替テキスト、結果はセンタリングで視認性を確保。</li>
+        <li>GitHub Pages（HTTPS）で配信し、Geolocation の要件を満たす。</li>
+      </ul>
+    </section>
+
+    <section class="cs-section" id="results">
+      <h2>成果 / 学び</h2>
+      <ul>
+        <li>ブラウザ機能（位置情報）と外部APIの連携全体像を把握。</li>
+        <li>エラーパターン（権限拒否/ネットワーク/ステータスコード）の切り分けを実装で体得。</li>
+        <li>UIの状態管理（loading/error/empty）を通じて実務的な配慮の重要性を理解。</li>
+      </ul>
+      <p class="subtitle">次の改善候補：単位切替（°C/°F）、検索履歴、簡易キャッシュ、i18n（ja/en）、ライト/ダーク自動対応。</p>
+    </section>
+
+    <section class="cs-section" id="links">
+      <h2>リンク</h2>
+      <div class="cs-actions">
+        <a class="link-btn" href="../weather-app/index.html" target="_blank" rel="noopener">デモを見る</a>
+        <a class="link-btn" href="https://github.com/yuuta5625/weather-app" target="_blank" rel="noopener">GitHub リポジトリ</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 内山 雄大</p>
+  </footer>
+
+  <!-- 共通JS（ナビ等） -->
+  <script src="../main.js" defer></script>
+</body>
+</html>

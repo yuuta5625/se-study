@@ -80,6 +80,7 @@
           <h2>作品</h2>
 
           <div class="works-grid">
+            <!-- 1) ポートフォリオサイト -->
             <article class="work-card">
               <img src="./assets/samune1.JPG" alt="作品1のサムネイル" />
               <div class="work-body">
@@ -91,43 +92,47 @@
               </div>
             </article>
 
+            <!-- 2) 天気予報アプリ -->
             <article class="work-card">
-              <img src="./assets/samune2.JPG" alt="作品2のサムネイル" />
+              <img src="./assets/weather-app.jpg" alt="天気予報アプリのサムネイル" />
               <div class="work-body">
-                <h3>ミニアプリ</h3>
-                <p>API を使った小さなツール。学習用に実装。</p>
-                <p><strong>使用技術：</strong> HTML / CSS / JavaScript / 外部API</p>
-                <p><strong>工夫した点：</strong> APIレスポンスを加工して、ユーザーに分かりやすく表示するよう工夫しました。</p>
-                <a id="demoWeatherBtn" class="link-btn" href="#weather" rel="noopener">デモ</a>
+                <h3>天気予報アプリ</h3>
+                <p>都市や現在地からリアルタイムの天気を表示。OpenWeather API を利用。</p>
+                <p><strong>使用技術：</strong> HTML / CSS / JavaScript / OpenWeather API</p>
+                <p><strong>工夫した点：</strong> 位置情報APIとエラー/ローディング表示など実務的な配慮。</p>
+                <div class="card-buttons">
+                  <a class="link-btn" href="./weather-app/index.html" target="_blank" rel="noopener">デモを見る</a>
+                <a class="link-btn" href="https://github.com/yuuta5625/se-study/tree/main/weather-app" target="_blank" rel="noopener">ソースコード</a>
+                  <a class="link-btn" href="./works/weather.html">詳しい解説</a>
+                </div>
               </div>
             </article>
 
+            <!-- 3) ToDoリスト -->
             <article class="work-card">
-              <img src="./assets/samune3.JPG" alt="作品3のサムネイル" />
+              <img src="./assets/todo.jpg" alt="ToDoリストアプリのサムネイル" />
+              <div class="work-body">
+                <h3>ToDoリスト</h3>
+                <p>タスク追加/完了/削除・フィルタ・ローカル保存に対応。</p>
+                <p><strong>使用技術：</strong> HTML / CSS / JavaScript / localStorage</p>
+                <div class="card-buttons">
+                  <a class="link-btn" href="./todo/index.html" target="_blank" rel="noopener">デモを見る</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- 4) UI コンポーネント集 -->
+            <article class="work-card">
+              <img src="./assets/samune3.JPG" alt="UIコンポーネント集のサムネイル" />
               <div class="work-body">
                 <h3>UI コンポーネント集</h3>
                 <p>ボタンやカードなど再利用しやすいUIをまとめました。</p>
                 <p><strong>使用技術：</strong> HTML / CSS / JavaScript</p>
-                <p><strong>工夫した点：</strong> デザインを統一し、複数のページで使い回せるようにしました。</p>
                 <a class="link-btn" href="#" target="_blank" rel="noopener">詳しく</a>
               </div>
             </article>
           </div>
         </div>
-
-       <article class="work-card">
-  <img src="./assets/weather-app.jpg" alt="天気予報アプリのサムネイル" />
-  <div class="work-body">
-    <h3>天気予報アプリ</h3>
-    <p>都市を入力するとリアルタイムで気温や天気を表示。外部APIを利用して最新データを取得。</p>
-    <p><strong>使用技術：</strong> HTML / CSS / JavaScript / OpenWeather API</p>
-    <p><strong>工夫した点：</strong> 検索した都市の気温や体感温度をシンプルに見せるUIを意識しました。</p>
-    <div class="card-buttons">
-      <a class="link-btn" href="./weather-app/index.html" target="_blank" rel="noopener">デモを見る</a>
-      <a class="link-btn" href="https://github.com/yuuta5625/weather-app" target="_blank" rel="noopener">ソースコード</a>
-    </div>
-  </div>
-</article>
 
         <!-- お問い合わせ -->
         <div class="section" id="contact">

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>ToDoリスト | 内山 雄大</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../style.css?v=7" />
+  <style>
+    /* ページ内の軽い調整（既存CSSと衝突しない範囲） */
+    .todo-wrap { max-width: 680px; margin: 32px auto; }
+    .todo-card { background: var(--card); border-radius: 16px; padding: 16px; box-shadow: 0 8px 24px rgba(0,0,0,.06); }
+    .todo-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+    .todo-input { height: 40px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
+    .todo-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+    .todo-item { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid #eee; border-radius: 10px; background: #fff; }
+    .todo-item.done .todo-label { text-decoration: line-through; color: var(--muted); }
+    .todo-actions { display: flex; gap: 8px; }
+    .todo-filter { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+    .empty { color: var(--muted); text-align: center; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <a class="site-title" href="../index.html" style="text-decoration:none">← 作品一覧へ</a>
+      <nav id="global-nav"></nav>
+    </div>
+  </header>
+
+  <main id="main" class="todo-wrap">
+    <h1>ToDoリスト</h1>
+    <p class="subtitle">タスクの追加・完了・削除。フィルタとローカル保存に対応。</p>
+
+    <section class="todo-card" aria-labelledby="todo-heading">
+      <h2 id="todo-heading" class="sr">ToDo</h2>
+
+      <div class="todo-row">
+        <input id="todo-input" class="todo-input" type="text" placeholder="例：ポートフォリオを更新" aria-label="新しいタスク" />
+        <button id="todo-add">追加</button>
+      </div>
+
+      <div class="todo-filter" role="group" aria-label="フィルタ">
+        <button data-filter="all" class="filter-btn" aria-pressed="true">すべて</button>
+        <button data-filter="active" class="filter-btn">未完了</button>
+        <button data-filter="done" class="filter-btn">完了</button>
+      </div>
+
+      <ul id="todo-list" class="todo-list" aria-live="polite" aria-relevant="additions removals text"></ul>
+      <p id="todo-empty" class="empty" hidden>まだタスクがありません。</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 内山 雄大</p>
+  </footer>
+
+  <script src="./todo.js" defer></script>
+</body>
+</html>
