@@ -2,12 +2,35 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <title>ToDoリスト | 内山 雄大</title>
+  <title>ToDoリスト – ケーススタディ | 内山 雄大</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ローカルストレージとアクセシビリティに配慮した ToDo リスト。追加・完了・削除・フィルタに対応し、日本語IMEのEnter処理にも対応。" />
+
+  <!-- ページ専用 Canonical / OGP -->
+  <link rel="canonical" href="https://yuuta5625.github.io/se-study/works/todo.html" />
+  <meta property="og:site_name" content="内山 雄大｜ポートフォリオ" />
+  <meta property="og:title" content="ToDoリスト – ケーススタディ" />
+  <meta property="og:description" content="LocalStorage×A11y。追加・完了・削除・フィルタ、日本語IME配慮、キーボード操作対応。" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://yuuta5625.github.io/se-study/works/todo.html" />
+  <meta property="og:image" content="https://yuuta5625.github.io/se-study/assets/todo-app.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- 回遊性 -->
+  <link rel="prev" href="./weather.html" />
+  <link rel="next" href="../index.html#works" />
+
+  <!-- 共有スタイル -->
   <link rel="stylesheet" href="../style.css?v=7" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
   <style>
+    :root { color-scheme: light dark; }
+    .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip-link:focus { position:static; width:auto; height:auto; padding:8px 12px; background:#000; color:#fff; border-radius:8px; }
+
     /* ページ内の軽い調整（既存CSSと衝突しない範囲） */
-    .todo-wrap { max-width: 680px; margin: 32px auto; }
+    .todo-wrap { max-width: 720px; margin: 32px auto; padding: 0 16px; }
     .todo-card { background: var(--card); border-radius: 16px; padding: 16px; box-shadow: 0 8px 24px rgba(0,0,0,.06); }
     .todo-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
     .todo-input { height: 40px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
@@ -16,38 +39,84 @@
     .todo-item.done .todo-label { text-decoration: line-through; color: var(--muted); }
     .todo-actions { display: flex; gap: 8px; }
     .todo-filter { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .filter-btn[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 2px; }
     .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
     .empty { color: var(--muted); text-align: center; margin-top: 12px; }
+    /* スクロール時の見出しズレ防止（固定ヘッダーがある想定） */
+    .anchor { scroll-margin-top: 80px; }
   </style>
+
+  <!-- 構造化データ（SoftwareSourceCode + パンくず） -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"SoftwareSourceCode",
+    "name":"ToDoリスト",
+    "description":"LocalStorage と A11y に配慮した ToDo アプリ。追加・完了・削除・フィルタ、日本語IMEのEnter処理。",
+    "codeRepository":"https://github.com/yuuta5625/se-study/tree/main/todo",
+    "programmingLanguage":"JavaScript",
+    "runtimePlatform":"Web",
+    "url":"https://yuuta5625.github.io/se-study/todo/",
+    "author":{"@type":"Person","name":"内山 雄大","url":"https://yuuta5625.github.io/se-study/"},
+    "dateCreated":"2025-09-01",
+    "datePublished":"2025-09-01"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"作品","item":"https://yuuta5625.github.io/se-study/index.html#works"},
+      {"@type":"ListItem","position":2,"name":"ToDoリスト"}
+    ]
+  }
+  </script>
 </head>
 <body>
+  <a class="skip-link" href="#main">メインへ移動</a>
+
   <header>
     <div class="header-container">
-      <a class="site-title" href="../index.html" style="text-decoration:none">← 作品一覧へ</a>
+      <a class="site-title" href="../index.html#works" style="text-decoration:none">← 作品一覧へ</a>
       <nav id="global-nav"></nav>
     </div>
   </header>
 
   <main id="main" class="todo-wrap">
-    <h1>ToDoリスト</h1>
-    <p class="subtitle">タスクの追加・完了・削除。フィルタとローカル保存に対応。</p>
+    <h1 class="anchor">ToDoリスト</h1>
+    <p class="subtitle">タスクの追加・完了・削除。フィルタとローカル保存に対応（日本語IME Enter配慮、キーボード操作可）。</p>
 
     <section class="todo-card" aria-labelledby="todo-heading">
       <h2 id="todo-heading" class="sr">ToDo</h2>
 
       <div class="todo-row">
-        <input id="todo-input" class="todo-input" type="text" placeholder="例：ポートフォリオを更新" aria-label="新しいタスク" />
-        <button id="todo-add">追加</button>
+        <!-- IME配慮：enterkeyhint / autocapitalize / autocomplete -->
+        <input
+          id="todo-input"
+          class="todo-input"
+          type="text"
+          placeholder="例：ポートフォリオを更新"
+          aria-label="新しいタスク"
+          enterkeyhint="done"
+          autocapitalize="off"
+          autocomplete="off"
+          inputmode="text"
+        />
+        <!-- type=button でフォーム送信にならないように -->
+        <button id="todo-add" type="button" aria-label="タスクを追加">追加</button>
       </div>
 
       <div class="todo-filter" role="group" aria-label="フィルタ">
-        <button data-filter="all" class="filter-btn" aria-pressed="true">すべて</button>
-        <button data-filter="active" class="filter-btn">未完了</button>
-        <button data-filter="done" class="filter-btn">完了</button>
+        <button data-filter="all" class="filter-btn" aria-pressed="true" type="button">すべて</button>
+        <button data-filter="active" class="filter-btn" aria-pressed="false" type="button">未完了</button>
+        <button data-filter="done" class="filter-btn" aria-pressed="false" type="button">完了</button>
       </div>
 
+      <!-- ライブルージョン：スクリーンリーダーに変化を通知 -->
       <ul id="todo-list" class="todo-list" aria-live="polite" aria-relevant="additions removals text"></ul>
       <p id="todo-empty" class="empty" hidden>まだタスクがありません。</p>
+      <noscript><p class="empty">※ このアプリはJavaScriptを利用します。ブラウザ設定をご確認ください。</p></noscript>
     </section>
   </main>
 
@@ -55,6 +124,7 @@
     <p>© 2025 内山 雄大</p>
   </footer>
 
+  <!-- 既存のアプリロジック -->
   <script src="./todo.js" defer></script>
 </body>
 </html>

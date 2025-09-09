@@ -11,7 +11,38 @@
 
   <!-- CSS（キャッシュ回避のため ?v=5 などのクエリを付ける） -->
   <link rel="stylesheet" href="./style.css?v=5" />
+
+  <!-- ✅ SEO / OGP 基本 -->
+  <link rel="canonical" href="https://yuuta5625.github.io/se-study/" />
+  <meta name="description" content="内山雄大｜フロントエンド志望。HTML/CSS/JS／React学習中。天気予報・ToDoなど実装重視のケーススタディを掲載。" />
+
+  <!-- ✅ OGP / Twitter -->
+  <meta property="og:site_name" content="内山 雄大｜ポートフォリオ" />
+  <meta property="og:title" content="内山 雄大｜フロントエンドポートフォリオ" />
+  <meta property="og:description" content="実装重視のケーススタディを掲載。HTML/CSS/JS、React学習中。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yuuta5625.github.io/se-study/" />
+  <meta property="og:image" content="https://yuuta5625.github.io/se-study/assets/ogp.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- ✅ 速度ちょい改善 -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- プロジェクトページでも安全な相対パス -->
+  <link rel="icon" href="./assets/favicon.ico">
+
+  <!-- ✅ 構造化データ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "内山 雄大",
+    "jobTitle": "Front-end Developer (Aspiring)",
+    "url": "https://yuuta5625.github.io/se-study/",
+    "sameAs": ["https://github.com/yuuta5625"]
+  }
+  </script>
 </head>
+
 
 <body>
   <!-- ✅ ヘッダー -->
@@ -40,8 +71,9 @@
   <main>
     <div class="container">
       <div class="card">
-        <img src="./assets/me.jpg" alt="profile"
-             style="width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:12px;" />
+      <img src="./assets/me.jpg" alt="profile"
+     width="120" height="120"
+     style="width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:12px;" />
 
         <h1>ようこそ！私の勉強ページへ 🚀（更新テスト）</h1>
         <p>フロントエンドエンジニアを目指しています。</p>
@@ -76,97 +108,108 @@
         </ul>
 
         <!-- 作品 -->
-        <div class="section" id="works">
-          <h2>作品</h2>
+<div class="section" id="works">
+  <h2>作品</h2>
 
-          <div class="works-grid">
-            <!-- 1) ポートフォリオサイト -->
-            <article class="work-card">
-              <img src="./assets/samune1.JPG" alt="作品1のサムネイル" />
-              <div class="work-body">
-                <h3>ポートフォリオサイト</h3>
-                <p>HTML/CSS/JSで作った自己紹介サイト。レスポンシブ対応。</p>
-                <p><strong>使用技術：</strong> HTML / CSS / JavaScript</p>
-                <p><strong>工夫した点：</strong> スマホでも見やすいようにレスポンシブデザインを意識しました。</p>
-                <a class="link-btn" href="https://github.com/yuuta5625" target="_blank" rel="noopener">リポジトリ</a>
-              </div>
-            </article>
+  <div class="works-grid">
+    <!-- 1) ポートフォリオサイト -->
+    <article class="work-card">
+      <img src="./assets/samune1.JPG" alt="作品1のサムネイル"
+           loading="lazy" width="640" height="360" />
+      <div class="work-body">
+        <h3>ポートフォリオサイト</h3>
+        <p>HTML/CSS/JSで作った自己紹介サイト。レスポンシブ対応。</p>
+        <p><strong>使用技術：</strong> HTML / CSS / JavaScript</p>
+        <p><strong>工夫した点：</strong> スマホでも見やすいようにレスポンシブデザインを意識しました。</p>
+        <a class="link-btn" href="https://github.com/yuuta5625" target="_blank" rel="noopener">リポジトリ</a>
+      </div>
+    </article>
 
-            <!-- 2) 天気予報アプリ -->
-            <article class="work-card">
-              <img src="./assets/weather-app.jpg" alt="天気予報アプリのサムネイル" />
-              <div class="work-body">
-                <h3>天気予報アプリ</h3>
-                <p>都市や現在地からリアルタイムの天気を表示。OpenWeather API を利用。</p>
-                <p><strong>使用技術：</strong> HTML / CSS / JavaScript / OpenWeather API</p>
-                <p><strong>工夫した点：</strong> 位置情報APIとエラー/ローディング表示など実務的な配慮。</p>
-                <div class="card-buttons">
-                  <a class="link-btn" href="./weather-app/index.html" target="_blank" rel="noopener">デモを見る</a>
-                <a class="link-btn" href="https://github.com/yuuta5625/se-study/tree/main/weather-app" target="_blank" rel="noopener">ソースコード</a>
-                  <a class="link-btn" href="./works/weather.html">詳しい解説</a>
-                </div>
-              </div>
-            </article>
-
-         <!-- 3) ToDoリスト -->
-<article class="work-card">
-  <img src="./assets/todo-app.jpg" alt="ToDoリストのサムネイル" />
-  <div class="work-body">
-    <h3>ToDoリスト</h3>
-    <p>タスクの追加・完了・削除・フィルタを備えたシンプルなToDoリスト。LocalStorageで永続化。</p>
-    <p><strong>使用技術：</strong> HTML / CSS / JavaScript / LocalStorage</p>
-    <p><strong>工夫した点：</strong> 日本語IMEに配慮したEnter処理やアクセシビリティ、状態管理。</p>
-    <div class="card-buttons">
-   <a class="link-btn" href="./todo/index.html" target="_blank" rel="noopener">デモを見る</a>
-
-      <a class="link-btn" href="https://github.com/yuuta5625/se-study/tree/main/todo" target="_blank" rel="noopener">ソースコード</a>
-      <a class="link-btn" href="./works/todo.html">詳しい解説</a>
-    </div>
-  </div>
-</article>
-
-  </div>
-</article>
-
-
-            <!-- 4) UI コンポーネント集 -->
-            <article class="work-card">
-              <img src="./assets/samune3.JPG" alt="UIコンポーネント集のサムネイル" />
-              <div class="work-body">
-                <h3>UI コンポーネント集</h3>
-                <p>ボタンやカードなど再利用しやすいUIをまとめました。</p>
-                <p><strong>使用技術：</strong> HTML / CSS / JavaScript</p>
-                <a class="link-btn" href="#" target="_blank" rel="noopener">詳しく</a>
-              </div>
-            </article>
-          </div>
+    <!-- 2) 天気予報アプリ -->
+    <article class="work-card">
+      <img src="./assets/weather-app.jpg"
+           alt="天気予報アプリのサムネイル"
+           loading="lazy" width="640" height="360" />
+      <div class="work-body">
+        <h3>天気予報アプリ</h3>
+        <p>都市や現在地からリアルタイムの天気を表示。OpenWeather API を利用。</p>
+        <p><strong>使用技術：</strong> HTML / CSS / JavaScript / OpenWeather API</p>
+        <p><strong>工夫した点：</strong> 位置情報APIとエラー/ローディング表示など実務的な配慮。</p>
+        <div class="card-buttons">
+          <a class="link-btn" href="./weather-app/index.html" target="_blank" rel="noopener">デモを見る</a>
+          <a class="link-btn" href="https://github.com/yuuta5625/se-study/tree/main/weather-app" target="_blank" rel="noopener">ソースコード</a>
+          <a class="link-btn" href="./works/weather.html">詳しい解説</a>
         </div>
+      </div>
+    </article>
+
+    <!-- 3) ToDoリスト -->
+    <article class="work-card">
+      <img src="./assets/todo-app.jpg" alt="ToDoリストのサムネイル"
+           loading="lazy" width="640" height="360" />
+      <div class="work-body">
+        <h3>ToDoリスト</h3>
+        <p>タスクの追加・完了・削除・フィルタ。LocalStorageで永続化。</p>
+        <p><strong>使用技術：</strong> HTML / CSS / JavaScript / LocalStorage</p>
+        <p><strong>工夫した点：</strong> 日本語IMEに配慮したEnter処理やアクセシビリティ、状態管理。</p>
+        <div class="card-buttons">
+          <a class="link-btn" href="./todo/index.html" target="_blank" rel="noopener">デモを見る</a>
+          <a class="link-btn" href="https://github.com/yuuta5625/se-study/tree/main/todo" target="_blank" rel="noopener">ソースコード</a>
+          <a class="link-btn" href="./works/todo.html">詳しい解説</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 4) UI コンポーネント集 -->
+    <article class="work-card">
+      <img src="./assets/samune3.JPG" alt="UIコンポーネント集のサムネイル"
+           loading="lazy" width="640" height="360" />
+      <div class="work-body">
+        <h3>UI コンポーネント集</h3>
+        <p>ボタンやカードなど再利用しやすいUIをまとめました。</p>
+        <p><strong>使用技術：</strong> HTML / CSS / JavaScript</p>
+        <a class="link-btn" href="#" target="_blank" rel="noopener">詳しく</a>
+      </div>
+    </article>
+  </div><!-- /.works-grid -->
+</div><!-- /.section -->
+
 
         <!-- お問い合わせ -->
-        <div class="section" id="contact">
-          <h2>お問い合わせ</h2>
-          <form class="contact-form" action="https://formspree.io/f/mblapgjd" method="POST">
-            <div class="form-row">
-              <label for="name">お名前</label>
-              <input id="name" name="name" type="text" placeholder="山田 太郎" required />
-            </div>
-            <div class="form-row">
-              <label for="email">メール</label>
-              <input id="email" name="email" type="email" placeholder="you@example.com" required />
-            </div>
-            <div class="form-row">
-              <label for="message">メッセージ</label>
-              <textarea id="message" name="message" rows="5" placeholder="ご用件をお書きください" required></textarea>
-            </div>
+<div class="section" id="contact">
+  <h2>お問い合わせ</h2>
 
-            <div class="form-actions">
-              <button type="submit">送信する</button>
-              <small class="form-note">※ 送信後はあなたのメールに届きます</small>
-            </div>
-          </form>
-        </div>
-      </div><!-- /.card -->
-    </div><!-- /.container -->
+  <form class="contact-form" action="https://formspree.io/f/mblapgjd" method="POST">
+    <!-- ✅ honeypot（人間には見えない入力） -->
+    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+    <!-- 件名固定（任意） -->
+    <input type="hidden" name="_subject" value="Portfolio Contact from uchiyama" />
+
+    <div class="form-row">
+      <label for="name">お名前</label>
+      <input id="name" name="name" type="text" placeholder="山田 太郎" autocomplete="name" required />
+    </div>
+
+    <div class="form-row">
+      <label for="email">メール</label>
+      <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+    </div>
+
+    <div class="form-row">
+      <label for="message">メッセージ</label>
+      <textarea id="message" name="message" rows="5" placeholder="ご用件をお書きください" required></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit">送信する</button>
+      <small class="form-note">※ 送信後はあなたのメールに届きます</small>
+    </div>
+  </form>
+
+  <!-- ✅ 成功/失敗メッセージ（JSで制御） -->
+  <div id="form-status" aria-live="polite"></div>
+</div>
+
   </main>
 
   <!-- ✅ フッター -->

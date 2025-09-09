@@ -194,3 +194,59 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   });
 })();
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector(".contact-form");
+  const status = document.getElementById("form-status");
+
+  if (form && status) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+
+      try {
+        const res = await fetch(form.action, {
+          method: form.method,
+          body: data,
+          headers: { Accept: "application/json" }
+        });
+
+        if (res.ok) {
+          status.textContent = "✅ 送信ありがとうございました！";
+          form.reset();
+        } else {
+          status.textContent = "⚠️ エラーが発生しました。もう一度お試しください。";
+        }
+      } catch {
+        status.textContent = "⚠️ ネットワークエラーです。時間をおいてお試しください。";
+      }
+    });
+  }
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector(".contact-form");
+  const status = document.getElementById("form-status");
+
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+
+      try {
+        const res = await fetch(form.action, {
+          method: form.method,
+          body: data,
+          headers: { Accept: "application/json" }
+        });
+
+        if (res.ok) {
+          // ✅ サンクスページへ
+          window.location.href = "./thanks.html";
+          return;
+        }
+        status && (status.textContent = "⚠️ エラーが発生しました。もう一度お試しください。");
+      } catch {
+        status && (status.textContent = "⚠️ ネットワークエラーです。時間をおいてお試しください。");
+      }
+    });
+  }
+});
