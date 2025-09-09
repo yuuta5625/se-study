@@ -6,155 +6,220 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="ローカルストレージとアクセシビリティに配慮した ToDo リストのケーススタディ。要件定義・実装・品質改善・学びをまとめました。" />
 
-  <!-- 共通CSS（存在しなくてもこのページは単体で表示されます） -->
+  <!-- Canonical / OGP -->
+  <link rel="canonical" href="https://yuuta5625.github.io/se-study/works/todo.html" />
+  <meta property="og:url" content="https://yuuta5625.github.io/se-study/works/todo.html">
+  <meta property="og:title" content="ToDoリスト – ケーススタディ">
+  <meta property="og:description" content="LocalStorage × A11y。IME日本語入力のEnter誤発火対策、フィルタ、状態管理を解説。">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="内山 雄大｜ポートフォリオ">
+  <meta property="og:image" content="https://yuuta5625.github.io/se-study/assets/ogp-todo.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ToDoリスト – ケーススタディ">
+  <meta name="twitter:description" content="LocalStorage × A11y。IME日本語入力のEnter誤発火対策、フィルタ、状態管理を解説。">
+  <meta name="twitter:image" content="https://yuuta5625.github.io/se-study/assets/ogp-todo.jpg">
+
+  <!-- ナビゲーションヒント -->
+  <link rel="prev" href="./weather.html" />
+  <link rel="next" href="../index.html#works" />
+
+  <!-- 共通スタイル -->
   <link rel="stylesheet" href="../style.css?v=6" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-  <!-- ✅ OGP / Twitter -->
-  <meta property="og:site_name" content="内山 雄大｜ポートフォリオ" />
-  <meta property="og:title" content="ToDoリスト – ケーススタディ" />
-  <meta property="og:description" content="LocalStorage×A11y。追加・完了・削除・フィルタ、日本語IME配慮、キーボード操作対応。" />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://yuuta5625.github.io/se-study/works/todo.html" />
-  <meta property="og:image" content="https://yuuta5625.github.io/se-study/assets/ogp-todo.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-
-  <!-- ページ内スタイル（最低限） -->
   <style>
+    /* ===== Page-local styles ===== */
     :root { color-scheme: light dark; }
-    body { font-family: system-ui, -apple-system, "Noto Sans JP", Roboto, sans-serif; margin:0; }
-    .cs-container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-    .cs-crumbs { font-size: 14px; color: #6b7280; margin-bottom: 12px; }
-    .cs-crumbs a { color: #2563eb; text-decoration: none; }
-    header { border-bottom: 1px solid #eee; }
-    .header-container { max-width: 1100px; margin: 0 auto; padding: 12px 20px; display:flex; justify-content:space-between; align-items:center; }
-    .site-title { font-weight: 600; }
-    .cs-hero { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 8px 24px rgba(0,0,0,.06); }
-    .subtitle { color:#6b7280; margin-top:6px; }
+    .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip-link:focus { position:static; width:auto; height:auto; padding:8px 12px; background:#000; color:#fff; border-radius:8px; }
+
+    .cs-container { max-width: 960px; margin: 40px auto; padding: 0 20px; }
+    .cs-crumbs { font-size: 14px; color: var(--muted); margin: 0 0 12px; }
+    .cs-crumbs a { color: var(--accent); text-decoration: none; }
+    .cs-hero { background: var(--card); border-radius: 16px; padding: 24px; box-shadow: 0 8px 24px rgba(0,0,0,.06); }
+    .cs-hero h1 { margin: 0 0 6px; }
+    .subtitle { color: var(--muted); margin: 6px 0 0; }
     .cs-meta { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-top:12px; }
     .cs-tag { font-size: 13px; background:#f4f6fb; border:1px solid #e6ebf5; padding:8px 10px; border-radius:10px; }
-    .cs-section { margin-top: 28px; background:#fff; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,.05); }
+
+    .cs-layout { display:grid; grid-template-columns: 220px 1fr; gap:24px; margin-top:24px; }
+    .toc { position:sticky; top:16px; align-self:start; background: var(--card); border-radius:12px; padding:12px; border:1px solid #ececec; }
+    .toc h2 { font-size:14px; margin:0 0 8px; color: var(--muted); }
+    .toc a { display:block; font-size:14px; padding:6px 4px; color: var(--text); text-decoration:none; }
+    .toc a:hover, .toc a:focus { text-decoration:underline; }
+    .cs-section { scroll-margin-top: 80px; margin-top: 0; background: var(--card); border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,.05); }
+    .cs-section + .cs-section { margin-top: 16px; }
     .cs-section h2 { margin: 0 0 12px; font-size: 22px; }
     .cs-grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
     .cs-fig { border:1px solid #eee; border-radius:12px; overflow:hidden; background:#fff; }
-    .cs-fig figcaption { font-size: 13px; color:#6b7280; padding: 8px 10px; background:#fafafa; }
+    .cs-fig figcaption { font-size: 13px; color: var(--muted); padding: 8px 10px; background:#fafafa; }
     .cs-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top: 12px; }
-    .link-btn { display:inline-block; padding:10px 14px; border-radius:10px; background:#2563eb; color:#fff; text-decoration:none; }
+    .link-btn { display:inline-block; padding:10px 14px; border-radius:10px; background:var(--accent); color:#fff; text-decoration:none; }
+    .link-btn.ghost { background:transparent; color:var(--accent); border:1px solid var(--accent); }
     .cs-kpi { display:grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap:12px; }
-    .cs-kpi .card { padding:14px; text-align:center; border:1px solid #ececec; border-radius:12px; background:#fff; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-    footer { border-top:1px solid #eee; margin-top:32px; }
-    footer p { max-width:1100px; margin:0 auto; padding:16px 20px; color:#6b7280; }
-    @media (max-width: 800px){ .cs-grid-2 { grid-template-columns: 1fr; } }
+    .cs-kpi .card { padding:14px; text-align:center; border:1px solid #ececec; border-radius:12px; background:var(--card); }
+
+    .demo-frame { aspect-ratio: 16/9; background:#fff; overflow:hidden; border:1px solid #eee; border-radius:12px; }
+    .demo-frame iframe { width:100%; height:100%; border:0; }
+
+    @media (max-width: 900px){
+      .cs-layout { grid-template-columns: 1fr; }
+      .toc { position:relative; top:auto; }
+      .cs-grid-2 { grid-template-columns: 1fr; }
+    }
   </style>
 
-  <!-- 構造化データ -->
+  <!-- 構造化データ（SoftwareSourceCode + パンくず） -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
-    "@type":"CreativeWork",
+    "@type":"SoftwareSourceCode",
     "name":"ToDoリスト",
-    "description":"ローカルストレージとアクセシビリティに配慮した ToDo リストのケーススタディ。",
-    "url":"../todo/index.html",
-    "image":"../assets/todo-app.jpg",
-    "creator":{"@type":"Person","name":"内山 雄大","url":"../index.html"},
-    "programmingLanguage":["HTML","CSS","JavaScript"],
-    "about":"状態管理 / IME対応Enterキー / フィルタリング / 永続化 / アクセシビリティ"
+    "description":"ローカルストレージとアクセシビリティに配慮した ToDo リスト。IME中Enter制御・フィルタ・状態管理を実装。",
+    "codeRepository":"https://github.com/yuuta5625/se-study/tree/main/todo",
+    "programmingLanguage":"JavaScript",
+    "runtimePlatform":"Web",
+    "url":"https://yuuta5625.github.io/se-study/todo/",
+    "author":{"@type":"Person","name":"内山 雄大","url":"https://yuuta5625.github.io/se-study/"},
+    "image":"https://yuuta5625.github.io/se-study/assets/ogp-todo.jpg",
+    "dateCreated":"2025-09-01",
+    "datePublished":"2025-09-01"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"作品","item":"https://yuuta5625.github.io/se-study/index.html#works"},
+      {"@type":"ListItem","position":2,"name":"ToDoリスト – ケーススタディ","item":"https://yuuta5625.github.io/se-study/works/todo.html"}
+    ]
   }
   </script>
 </head>
 <body>
+  <a class="skip-link" href="#main">メインへ移動</a>
+
   <header>
     <div class="header-container">
       <a class="site-title" href="../index.html#works" style="text-decoration:none">← 作品一覧へ</a>
-      <nav id="global-nav"></nav>
+      <nav id="global-nav" aria-label="グローバルナビ"></nav>
     </div>
   </header>
 
   <main id="main" class="cs-container">
     <p class="cs-crumbs"><a href="../index.html#works">作品</a> / ToDoリスト</p>
 
-    <section class="cs-hero">
-      <h1>ToDoリスト – ケーススタディ</h1>
-      <p class="subtitle">学習用ながら実務配慮（状態管理・キーボード操作・アクセシビリティ・パフォーマンス）まで実装。</p>
-
+    <section class="cs-hero" aria-labelledby="title">
+      <h1 id="title">ToDoリスト – ケーススタディ</h1>
+      <p class="subtitle">ローカルストレージ × アクセシビリティ。IME日本語入力対応のEnter制御、フィルタ、状態管理を実装。</p>
       <div class="cs-meta">
         <div class="cs-tag"><strong>役割</strong><br>個人開発（設計・実装・デザイン）</div>
-        <div class="cs-tag"><strong>期間</strong><br>2025年9月（約1日）</div>
+        <div class="cs-tag"><strong>期間</strong><br>2025年9月（約2日）</div>
         <div class="cs-tag"><strong>技術</strong><br>HTML / CSS / JavaScript / LocalStorage</div>
       </div>
-
       <div class="cs-actions">
         <a class="link-btn" href="../todo/index.html" target="_blank" rel="noopener">デモを見る</a>
-        <a class="link-btn" href="https://github.com/yuuta5625/se-study/tree/main/todo" target="_blank" rel="noopener">GitHub</a>
+        <a class="link-btn ghost" href="https://github.com/yuuta5625/se-study/tree/main/todo" target="_blank" rel="noopener">GitHub</a>
+        <a class="link-btn" href="../index.html#works">Worksに戻る</a>
       </div>
     </section>
 
-    <section class="cs-section" id="background">
-      <h2>背景 / 目的</h2>
-      <ul>
-        <li>CRUDの基礎を固める（Create/Read/Update/Delete）。</li>
-        <li>日本語IMEに配慮した Enter ハンドリングで現実的なUX。</li>
-        <li>状態管理（全件/未完了/完了）× 永続化（LocalStorage）。</li>
-      </ul>
-    </section>
+    <div class="cs-layout">
+      <!-- TOC -->
+      <aside class="toc" aria-labelledby="toc-title">
+        <h2 id="toc-title">目次</h2>
+        <a href="#background">背景 / 目的</a>
+        <a href="#goals">目標と評価指標</a>
+        <a href="#implementation">実装ハイライト</a>
+        <a href="#quality">品質・アクセシビリティ</a>
+        <a href="#results">成果 / 学び</a>
+      </aside>
 
-    <section class="cs-section" id="goals">
-      <h2>目標と評価指標</h2>
-      <div class="cs-kpi">
-        <div class="card"><strong>成功基準</strong><br>追加/編集/削除/完了切替/一括クリア</div>
-        <div class="card"><strong>UX</strong><br>空/読み込み/エラーの状態表示とフォーカス管理</div>
-        <div class="card"><strong>速度</strong><br>初回 LCP 2.0s 以内</div>
-        <div class="card"><strong>保守</strong><br>storage / render / actions の分離</div>
-      </div>
-    </section>
-
-    <section class="cs-section" id="implementation">
-      <h2>実装ハイライト</h2>
-      <div class="cs-grid-2">
-        <div>
+      <div class="content">
+        <section class="cs-section" id="background">
+          <h2>背景 / 目的</h2>
           <ul>
-            <li>モデル：<span class="mono">{ id, title, done, createdAt }</span> の配列を <span class="mono">localStorage</span> にJSON保存。</li>
-            <li>IME考慮：<span class="mono">keydown</span>時は <span class="mono">e.isComposing</span> を無視、229フォールバック。</li>
-            <li>フィルタ：<span class="mono">all / active / done</span> をUIとURLハッシュに同期。</li>
-            <li>編集：インライン編集（Escキャンセル / Enter確定 / 空は不可）。</li>
-            <li>A11y：ネイティブボタン、ラベル、<span class="mono">aria-pressed</span>、フォーカスリング尊重。</li>
+            <li>シンプルなCRUDで状態管理の基本を固める。</li>
+            <li>日本語IME入力時のEnter挙動など、実務で躓きやすい点に対応。</li>
+            <li>LocalStorageで永続化し、リロード後もタスクを保持。</li>
           </ul>
-        </div>
-        <figure class="cs-fig">
-          <iframe src="../todo/index.html" title="ToDoリスト デモ" loading="lazy" style="width:100%;aspect-ratio:16/9;border:0;"></iframe>
-          <figcaption>埋め込みデモ（新しいタブでも開けます）</figcaption>
-        </figure>
+        </section>
+
+        <section class="cs-section" id="goals">
+          <h2>目標と評価指標</h2>
+          <div class="cs-kpi">
+            <div class="card"><strong>機能</strong><br>追加/完了/削除/フィルタが正しく動作</div>
+            <div class="card"><strong>操作性</strong><br>IME日本語入力中はEnterで追加されない</div>
+            <div class="card"><strong>データ</strong><br>LocalStorageに保存・復元OK</div>
+            <div class="card"><strong>A11y</strong><br>キーボード操作/フォーカス可視/ARIA</div>
+          </div>
+        </section>
+
+        <section class="cs-section" id="implementation">
+          <h2>実装ハイライト</h2>
+          <div class="cs-grid-2">
+            <div>
+              <ul>
+                <li><strong>IME中Enter無視：</strong><code>keydown</code>で<code>e.isComposing===false</code> を確認。</li>
+                <li><strong>フォールバック：</strong>一部環境向けに<code>keyup</code>と<code>keyCode===229</code>で補強。</li>
+                <li><strong>状態管理：</strong>配列 <code>items</code> をLocalStorageへ読み書き、フィルタは <code>all/active/done</code>。</li>
+                <li><strong>アクセシビリティ：</strong>フィルタボタンに <code>aria-pressed</code>、チェック操作はキーボード対応。</li>
+              </ul>
+            </div>
+            <figure class="cs-fig demo-frame">
+              <iframe
+                src="../todo/index.html"
+                title="ToDoリスト デモ"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+              <figcaption>埋め込みデモ（操作は別タブのデモでも可能です）</figcaption>
+            </figure>
+          </div>
+          <div class="cs-actions">
+            <a class="link-btn" href="../todo/index.html" target="_blank" rel="noopener">新しいタブで開く</a>
+          </div>
+        </section>
+
+        <section class="cs-section" id="quality">
+          <h2>品質・アクセシビリティ</h2>
+          <ul>
+            <li>フォーカスリング可視、タブ移動で操作可能。</li>
+            <li>ボタンのロール/状態（<code>aria-pressed</code>）を明示。</li>
+            <li>誤操作防止（IME中Enter無効）で入力体験を担保。</li>
+            <li>空文字や前後スペースの正規化、重複登録の抑止（任意）。</li>
+          </ul>
+        </section>
+
+        <section class="cs-section" id="results">
+          <h2>成果 / 学び</h2>
+          <ul>
+            <li>IMEやキーボード操作など、日本語環境特有のUX課題を理解。</li>
+            <li>状態/永続化/フィルタの責務分離でコードが読みやすくなった。</li>
+            <li>UIの状態（empty/loading/error/normal）を意識する重要性を再確認。</li>
+          </ul>
+          <p class="subtitle">次の改善候補：ドラッグ&ドロップ並び替え、締切/リマインド、タスク検索、タグ付け、PWA化。</p>
+        </section>
+
+        <!-- 任意：Lighthouse スコア貼り付け位置 -->
+        <!--
+        <section class="cs-section">
+          <h2>Lighthouse スコア（デスクトップ）</h2>
+          <img src="../assets/todo-lh-desktop.png" alt="Lighthouse スコア（デスクトップ）" loading="lazy" decoding="async">
+          <p style="color:#6b7280;font-size:13px;">取得日：2025-09-09 / 環境：Chromeデスクトップ</p>
+        </section>
+        -->
       </div>
-    </section>
-
-    <section class="cs-section" id="quality">
-      <h2>品質・アクセシビリティ</h2>
-      <ul>
-        <li>Enterで追加、Space/Enterでトグル、Deleteで削除（確認）。</li>
-        <li><span class="mono">aria-live="polite"</span> で追加/削除を通知。</li>
-        <li>フィルタ結果なしや全完了時のメッセージ表示。</li>
-        <li>再訪時に状態復元、スキーマ変更はマイグレーションで吸収。</li>
-      </ul>
-    </section>
-
-    <section class="cs-section" id="results">
-      <h2>成果 / 学び</h2>
-      <ul>
-        <li>IME配慮のEnter処理（<span class="mono">isComposing</span>/229）を具体化。</li>
-        <li>小規模でもロジック分離が可読性・保守性に寄与。</li>
-        <li>A11yの基本（ロール/ラベル/フォーカス/ライブリージョン）を実装で体得。</li>
-      </ul>
-      <p class="subtitle">次の改善：ドラッグ&ドロップ並び替え、検索/タグ、Undo（1段）、E2E、ダークモード。</p>
-    </section>
+    </div>
   </main>
 
   <footer>
     <p>© 2025 内山 雄大</p>
   </footer>
 
-  <!-- 既存の共通JSがあれば -->
   <script src="../main.js" defer></script>
 </body>
 </html>

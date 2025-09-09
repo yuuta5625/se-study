@@ -569,3 +569,4 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   font-size: 16px;
   border-radius: 8px;
 }
+.nav-toggle-bar{display:block;width:22px;height:2px;background:#333;margin:4px 0;border-radius:2px}

@@ -6,27 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="OpenWeather API を用いた天気予報アプリのケーススタディ。要件定義・実装・品質改善・学びをまとめました。" />
 
-  <!-- ページ専用 Canonical / OGP -->
+  <!-- Canonical / OGP -->
   <link rel="canonical" href="https://yuuta5625.github.io/se-study/works/weather.html" />
-<meta property="og:url" content="https://yuuta5625.github.io/se-study/works/weather.html">
-<meta property="og:title" content="天気予報アプリ – ケーススタディ">
-<meta property="og:description" content="OpenWeather API × Geolocation。ローディング/エラー表示など実務的配慮も解説。">
-<meta property="og:type" content="article">
-<meta property="og:image" content="https://yuuta5625.github.io/se-study/assets/ogp-weather.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
+  <meta property="og:url" content="https://yuuta5625.github.io/se-study/works/weather.html">
+  <meta property="og:title" content="天気予報アプリ – ケーススタディ">
+  <meta property="og:description" content="OpenWeather API × Geolocation。ローディング/エラー表示など実務的配慮も解説。">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="内山 雄大｜ポートフォリオ">
+  <meta property="og:image" content="https://yuuta5625.github.io/se-study/assets/ogp-weather.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="天気予報アプリ – ケーススタディ">
+  <meta name="twitter:description" content="OpenWeather API × Geolocation。ローディング/エラー表示など実務的配慮も解説。">
+  <meta name="twitter:image" content="https://yuuta5625.github.io/se-study/assets/ogp-weather.jpg">
 
   <!-- ナビゲーションヒント -->
   <link rel="prev" href="./todo.html" />
   <link rel="next" href="../index.html#works" />
 
-  <!-- 共有スタイル -->
+  <!-- 共通スタイル -->
   <link rel="stylesheet" href="../style.css?v=6" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
   <style>
-    /* ===== Page-local styles (既存の命名を維持) ===== */
+    /* ===== Page-local styles ===== */
     :root { color-scheme: light dark; }
     .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
     .skip-link:focus { position:static; width:auto; height:auto; padding:8px 12px; background:#000; color:#fff; border-radius:8px; }
@@ -53,6 +57,7 @@
     .cs-fig figcaption { font-size: 13px; color: var(--muted); padding: 8px 10px; background:#fafafa; }
     .cs-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top: 12px; }
     .link-btn { display:inline-block; padding:10px 14px; border-radius:10px; background:var(--accent); color:#fff; text-decoration:none; }
+    .link-btn.ghost { background:transparent; color:var(--accent); border:1px solid var(--accent); }
     .cs-kpi { display:grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap:12px; }
     .cs-kpi .card { padding:14px; text-align:center; border:1px solid #ececec; border-radius:12px; background:var(--card); }
 
@@ -78,6 +83,7 @@
     "runtimePlatform":"Web",
     "url":"https://yuuta5625.github.io/se-study/weather-app/",
     "author":{"@type":"Person","name":"内山 雄大","url":"https://yuuta5625.github.io/se-study/"},
+    "image":"https://yuuta5625.github.io/se-study/assets/ogp-weather.jpg",
     "dateCreated":"2025-09-01",
     "datePublished":"2025-09-01"
   }
@@ -88,7 +94,7 @@
     "@type":"BreadcrumbList",
     "itemListElement":[
       {"@type":"ListItem","position":1,"name":"作品","item":"https://yuuta5625.github.io/se-study/index.html#works"},
-      {"@type":"ListItem","position":2,"name":"天気予報アプリ"}
+      {"@type":"ListItem","position":2,"name":"天気予報アプリ – ケーススタディ","item":"https://yuuta5625.github.io/se-study/works/weather.html"}
     ]
   }
   </script>
@@ -99,7 +105,7 @@
   <header>
     <div class="header-container">
       <a class="site-title" href="../index.html#works" style="text-decoration:none">← 作品一覧へ</a>
-      <nav id="global-nav"></nav>
+      <nav id="global-nav" aria-label="グローバルナビ"></nav>
     </div>
   </header>
 
@@ -116,7 +122,8 @@
       </div>
       <div class="cs-actions">
         <a class="link-btn" href="../weather-app/index.html" target="_blank" rel="noopener">デモを見る</a>
-        <a class="link-btn" href="https://github.com/yuuta5625/se-study/tree/main/weather-app" target="_blank" rel="noopener">GitHub</a>
+        <a class="link-btn ghost" href="https://github.com/yuuta5625/se-study/tree/main/weather-app" target="_blank" rel="noopener">GitHub</a>
+        <a class="link-btn" href="../index.html#works">Worksに戻る</a>
       </div>
     </section>
 
@@ -199,6 +206,15 @@
           </ul>
           <p class="subtitle">次の改善候補：単位切替（°C/°F）、検索履歴、キャッシュ、i18n（ja/en）、ダークモード自動対応。</p>
         </section>
+
+        <!-- 任意：Lighthouse スコア貼り付け位置 -->
+        <!--
+        <section class="cs-section">
+          <h2>Lighthouse スコア（デスクトップ）</h2>
+          <img src="../assets/weather-lh-desktop.png" alt="Lighthouse スコア（デスクトップ）" loading="lazy" decoding="async">
+          <p style="color:#6b7280;font-size:13px;">取得日：2025-09-09 / 環境：Chromeデスクトップ</p>
+        </section>
+        -->
       </div>
     </div>
   </main>
@@ -207,7 +223,7 @@
     <p>© 2025 内山 雄大</p>
   </footer>
 
-  <!-- 既存の main.js を読む（共通のJSがある場合） -->
+  <!-- 共通スクリプト（必要なら） -->
   <script src="../main.js" defer></script>
 </body>
 </html>

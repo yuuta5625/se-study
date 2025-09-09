@@ -47,10 +47,33 @@
     "sameAs": ["https://github.com/yuuta5625"]
   }
   </script>
+  <style>
+  /* ---- アクセシビリティ土台 ---- */
+  .skip-link{position:absolute;left:-9999px;top:auto}
+  .skip-link:focus{left:16px;top:16px;background:#000;color:#fff;padding:8px 12px;border-radius:8px;z-index:1000;outline:2px solid #fff}
+  :focus-visible{outline:2px solid var(--accent, #2563eb);outline-offset:2px}
+
+  /* ---- ヒーロー＋CTA ---- */
+  .hero{background:var(--card,#fff);border-radius:16px;padding:28px;box-shadow:0 8px 24px rgba(0,0,0,.06);margin:24px 0}
+  .hero .title{font-size:clamp(22px,4vw,32px);margin:0 0 6px}
+  .hero .lead{color:var(--muted,#6b7280);margin:0 0 14px}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--accent,#2563eb);color:#fff;text-decoration:none;line-height:1;border:1px solid transparent}
+  .btn.ghost{background:transparent;color:var(--accent,#2563eb);border-color:var(--accent,#2563eb)}
+
+  /* ---- ナビ開閉（SP） ---- */
+  #global-nav{transition:max-height .25s ease;overflow:hidden;max-height:0}
+  #global-nav.open{max-height:400px}
+  @media (min-width:769px){#global-nav{max-height:none!important;overflow:visible}}
+</style>
+
 </head>
 
 
 <body>
+ <!-- ✅ スキップリンク -->
+  <a class="skip-link" href="#main">メインコンテンツへ移動</a>
+
   <!-- ✅ ヘッダー -->
   <header>
     <div class="header-container">
@@ -63,7 +86,7 @@
         <span class="nav-toggle-bar"></span>
       </button>
 
-      <nav id="global-nav">
+    <nav id="global-nav" aria-label="グローバルナビ">
         <ul class="nav-list">
           <li><a href="#profile">プロフィール</a></li>
           <li><a href="#works">作品</a></li>
@@ -74,8 +97,20 @@
   </header>
 
   <!-- ✅ メイン -->
-  <main>
+  <main id="main">
     <div class="container">
+
+      <!-- ✅ ヒーローを最上部に追加 -->
+      <section class="hero">
+        <h1 class="title">内山 雄大 – フロントエンド志望</h1>
+        学びを即行動に。小さな改善を積み重ねるエンジニア
+        <p class="lead">HTML/CSS/JS、React学習中。実装重視のケーススタディを公開中。</p>
+        <div class="cta">
+          <a class="btn" href="#works">作品を見る</a>
+          <a class="btn ghost" href="https://github.com/yuuta5625" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </section>
+
       <div class="card">
       <img src="./assets/me.jpg" alt="profile"
      width="120" height="120"
@@ -87,7 +122,6 @@
         <p>将来的には React を活用して、よりインタラクティブなWeb体験を提供できるエンジニアを目指します。</p>
 
         <div class="actions">
-          <a class="link-btn" href="https://github.com/yuuta5625" target="_blank" rel="noopener">GitHubを見る</a>
           <button id="greetBtn">挨拶する</button>
         </div>
 

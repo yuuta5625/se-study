@@ -250,3 +250,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+// ==== ハンバーガー制御（ARIA対応） ====
+(() => {
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('global-nav');
+  if (!toggle || !nav) return;
+
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+
+  // ナビ内リンクを踏んだら自動クローズ（SP想定）
+  nav.addEventListener('click', (e) => {
+    if (e.target.closest('a')) {
+      nav.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
