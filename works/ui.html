@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <header>
+    <div class="header-container">
+      <a class="site-title" href="../index.html#works" style="text-decoration:none">← 作品一覧へ</a>
+      <nav id="global-nav" aria-label="グローバルナビ"></nav>
+    </div>
+  </header>
+  
+  <meta charset="utf-8" />
+  <title>UIコンポーネント集 | 内山 雄大</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ボタン・カード・モーダル・タブ・アコーディオン・フォーム・トーストなどのUIコンポーネントを一覧で確認できます。" />
+
+  <!-- 既存サイトに合わせたフォント（不要なら削除OK） -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <!-- 既存の共通CSSがあるなら読み込み（パスは調整してね） -->
+  <link rel="stylesheet" href="../style.css?v=6" />
+
+  <style>
+    /* ========== ページ内用の最小スコープCSS（既存トークン活用） ========== */
+    :root {
+      --bg: var(--bg, #f7f7fb);
+      --card: var(--card, #ffffff);
+      --text: var(--text, #222);
+      --muted: var(--muted, #666);
+      --accent: var(--accent, #3a7bd5);
+    }
+    body { font-family: 'Noto Sans JP', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+
+    .page-head { display:flex; justify-content:space-between; align-items:end; gap:16px; margin: 8px 0 24px; }
+    .page-title { font-size: clamp(22px, 3.2vw, 32px); margin:0; }
+    .page-sub { color: var(--muted); margin:0; }
+
+    .toc { background: var(--card); border-radius: 14px; padding: 16px; box-shadow: 0 6px 18px rgba(0,0,0,.06); margin-bottom: 24px; }
+    .toc a { color: var(--accent); text-decoration: none; margin-right: 12px; white-space:nowrap; }
+    .section { background: var(--card); border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,.06); margin: 16px 0 28px; }
+    .section h2 { margin: 0 0 12px; font-size: clamp(18px, 2.6vw, 24px); }
+    .note { color: var(--muted); font-size: 14px; margin: 6px 0 0; }
+
+    /* Buttons */
+    .row { display:flex; flex-wrap:wrap; gap: 12px; align-items:center; }
+    .btn { display:inline-block; padding: 10px 14px; border-radius: 10px; background: var(--accent); color:#fff; text-decoration:none; line-height:1; border:1px solid transparent; cursor:pointer; }
+    .btn:hover { opacity:.9; }
+    .btn.ghost { background: transparent; color: var(--accent); border-color: var(--accent); }
+    .btn.subtle { background: #eef3ff; color: #254; border-color: transparent; }
+    .btn.round { border-radius: 999px; }
+    .btn.sm { padding: 7px 10px; font-size: 14px; }
+    .btn.lg { padding: 12px 18px; font-size: 16px; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+    /* Cards */
+    .card-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:16px; }
+    .card { background: var(--card); border:1px solid #eee; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; }
+    .card .thumb { aspect-ratio: 16/9; background: linear-gradient(120deg, #e9efff, #fff); }
+    .card .body { padding:14px; display:flex; flex-direction:column; gap:8px; }
+    .badge { display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; background:#eef; color:#345; }
+
+    /* Modal */
+    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; padding:16px; }
+    .modal-backdrop.open { display:flex; }
+    .modal { background: var(--card); border-radius: 14px; width: min(560px, 100%); padding: 18px; box-shadow: 0 16px 40px rgba(0,0,0,.25); }
+    .modal header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .modal header h3 { margin:0; font-size: 18px; }
+    .icon-btn { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--muted); }
+
+    /* Tabs */
+    .tabs { display:grid; gap: 0; }
+    .tab-list { display:flex; gap:8px; flex-wrap:wrap; border-bottom:1px solid #eee; }
+    .tab-list button { padding:10px 14px; border:none; background:transparent; cursor:pointer; border-bottom:2px solid transparent; }
+    .tab-list button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); font-weight:700; }
+    .tab-panel { display:none; padding:14px 0 0; }
+    .tab-panel[aria-hidden="false"] { display:block; }
+
+    /* Accordion */
+    .accordion { display:grid; gap:10px; }
+    .acc-item { border:1px solid #eee; border-radius:10px; background: #fff; }
+    .acc-head { width:100%; background:transparent; border:none; text-align:left; padding:12px 14px; cursor:pointer; font-weight:700; }
+    .acc-panel { display:none; padding: 0 14px 12px; color: #333; }
+    .acc-item.open .acc-panel { display:block; }
+
+    /* Toast */
+    .toast-wrap { position: fixed; right: 16px; bottom: 16px; display:grid; gap:10px; z-index: 9999; }
+    .toast { background:#111; color:#fff; padding:10px 14px; border-radius:10px; box-shadow: 0 10px 20px rgba(0,0,0,.25); }
+    .toast.success { background:#166534; }
+    .toast.info { background:#1e40af; }
+    .toast.warn { background:#92400e; }
+
+    /* Form */
+    .form-grid { display:grid; gap:12px; max-width:560px; }
+    .field label { display:block; font-size:14px; color:var(--muted); margin-bottom:6px; }
+    .input, .select, .textarea { width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; background:#fff; }
+    .help { font-size:12px; color:var(--muted); margin-top:6px; }
+
+    /* Code sample (任意) */
+    pre { background:#0b1020; color:#d7e2ff; padding:12px; border-radius:10px; overflow:auto; font-size:12px; }
+
+    /* 小さなユーティリティ */
+    .space { height: 8px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header class="page-head" role="banner">
+      <div>
+        <h1 class="page-title">UIコンポーネント集</h1>
+        <p class="page-sub">過去に作ったUI部品を、再利用しやすい形で一覧化</p>
+      </div>
+      <nav aria-label="ページ内ナビ" class="toc">
+        <a href="#buttons">Buttons</a>
+        <a href="#cards">Cards</a>
+        <a href="#modal">Modal</a>
+        <a href="#tabs">Tabs</a>
+        <a href="#accordion">Accordion</a>
+        <a href="#toast">Toast</a>
+        <a href="#form">Form</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <!-- Buttons -->
+      <section class="section" id="buttons" aria-labelledby="buttons-h">
+        <h2 id="buttons-h">Buttons</h2>
+        <div class="row">
+          <button class="btn">通常</button>
+          <button class="btn ghost">ゴースト</button>
+          <button class="btn subtle">サブトーン</button>
+          <button class="btn round">丸ボタン</button>
+          <button class="btn sm">小さめ</button>
+          <button class="btn lg">大きめ</button>
+          <button class="btn" disabled>無効</button>
+        </div>
+        <p class="note">キーカラーは <code>--accent</code> を使用。</p>
+      </section>
+
+      <!-- Cards -->
+      <section class="section" id="cards" aria-labelledby="cards-h">
+        <h2 id="cards-h">Cards</h2>
+        <div class="card-grid">
+          <article class="card">
+            <div class="thumb" role="img" aria-label="サンプルサムネイル"></div>
+            <div class="body">
+              <div class="badge">Weather</div>
+              <h3 style="margin:0">天気予報アプリ</h3>
+              <p style="margin:0">OpenWeather APIで現在の天気と体感温度を表示。</p>
+              <div class="row">
+                <a class="btn" href="../works/weather.html">詳しく</a>
+                <a class="btn ghost" href="https://github.com/yuuta5625" target="_blank" rel="noopener">GitHub</a>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="thumb"></div>
+            <div class="body">
+              <div class="badge">ToDo</div>
+              <h3 style="margin:0">ToDoリスト</h3>
+              <p style="margin:0">ローカルストレージとアクセシビリティに配慮。</p>
+              <div class="row">
+                <a class="btn" href="../works/todo.html">詳しく</a>
+                <a class="btn ghost" href="https://github.com/yuuta5625" target="_blank" rel="noopener">GitHub</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+     <!-- Modal -->
+<section class="section" id="modal" aria-labelledby="modal-h">
+  <h2 id="modal-h">Modal</h2>
+  <div class="row">
+    <button class="btn" data-open-modal>モーダルを開く</button>
+  </div>
+  <p class="note">Esc キーまたは外側クリックで閉じる。フォーカストラップ対応。</p>
+
+  <div class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="md-title">
+    <div class="modal">
+      <header>
+        <h3 id="md-title">お知らせ</h3>
+        <button class="icon-btn" aria-label="閉じる" data-close-modal>✕</button>
+      </header>
+      <div style="margin-top:10px">
+        これはサンプルのモーダルです。本文やフォームを配置できます。
+      </div>
+      <div class="row" style="margin-top:16px; justify-content:end">
+        <button class="btn ghost" data-close-modal>閉じる</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+      <!-- Tabs -->
+      <section class="section" id="tabs" aria-labelledby="tabs-h">
+        <h2 id="tabs-h">Tabs</h2>
+        <div class="tabs" data-tabs>
+          <div role="tablist" class="tab-list" aria-label="サンプルタブ">
+            <button role="tab" aria-selected="true" aria-controls="t1" id="tab1">概要</button>
+            <button role="tab" aria-selected="false" aria-controls="t2" id="tab2">仕様</button>
+            <button role="tab" aria-selected="false" aria-controls="t3" id="tab3">コード</button>
+          </div>
+          <div id="t1" class="tab-panel" role="tabpanel" aria-labelledby="tab1" aria-hidden="false">
+            コンポーネントの切り替えUI。キーボード（← → / Home / End）操作に対応。
+          </div>
+          <div id="t2" class="tab-panel" role="tabpanel" aria-labelledby="tab2" aria-hidden="true">
+            タブはARIAロールと <code>aria-selected</code> / <code>aria-controls</code> を設定。
+          </div>
+          <div id="t3" class="tab-panel" role="tabpanel" aria-labelledby="tab3" aria-hidden="true">
+<pre><code>// 初期タブ: aria-selected="true"
+// パネル: 対応する tab の aria-controls と一致</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Accordion -->
+      <section class="section" id="accordion" aria-labelledby="acc-h">
+        <h2 id="acc-h">Accordion</h2>
+        <div class="accordion" data-accordion>
+          <div class="acc-item">
+            <button class="acc-head" aria-expanded="false">Q. これは何？</button>
+            <div class="acc-panel">A. よくあるFAQの開閉UIです。</div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head" aria-expanded="false">Q. 複数同時に開ける？</button>
+            <div class="acc-panel">A. 今は自由開閉。必要なら単一開閉にもできます。</div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head" aria-expanded="false">Q. アクセシビリティは？</button>
+            <div class="acc-panel">A. <code>aria-expanded</code> を更新してスクリーンリーダーに伝えます。</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Toast -->
+      <section class="section" id="toast" aria-labelledby="toast-h">
+        <h2 id="toast-h">Toast</h2>
+        <div class="row">
+          <button class="btn" data-toast="success">成功を表示</button>
+          <button class="btn ghost" data-toast="info">情報を表示</button>
+          <button class="btn subtle" data-toast="warn">警告を表示</button>
+        </div>
+        <div class="toast-wrap" aria-live="polite" aria-atomic="true"></div>
+        <p class="note">自動で3秒後に消えます。</p>
+      </section>
+
+      <!-- Form -->
+      <section class="section" id="form" aria-labelledby="form-h">
+        <h2 id="form-h">Form</h2>
+        <form class="form-grid" onsubmit="event.preventDefault();">
+          <div class="field">
+            <label for="name">お名前</label>
+            <input id="name" class="input" type="text" placeholder="内山 雄大" />
+          </div>
+          <div class="field">
+            <label for="email">メール</label>
+            <input id="email" class="input" type="email" placeholder="you@example.com" />
+          </div>
+          <div class="field">
+            <label for="role">希望ロール</label>
+            <select id="role" class="select">
+              <option>フロントエンド</option>
+              <option>UIデザイン</option>
+              <option>動画編集</option>
+            </select>
+          </div>
+          <div class="field">
+            <label><input type="checkbox" /> 連絡を希望する</label>
+          </div>
+          <div class="field">
+            <label for="msg">メッセージ</label>
+            <textarea id="msg" class="textarea" rows="4" placeholder="お問い合わせ内容…"></textarea>
+            <div class="help">入力例：案件のご相談、共同制作のご提案 など</div>
+          </div>
+          <div class="row">
+            <button class="btn" type="submit">送信（ダミー）</button>
+            <button class="btn ghost" type="reset">リセット</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script>
+  // ========== Modal ==========
+  (() => {
+    const openBtn = document.querySelector('[data-open-modal]');
+    const backdrop = document.querySelector('.modal-backdrop');
+    const closeBtns = backdrop?.querySelectorAll('[data-close-modal], .modal [data-close]');
+    const focusable = () => backdrop?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+
+    const open = () => {
+      backdrop?.classList.add('open');
+      backdrop?.setAttribute('aria-hidden', 'false');
+      // フォーカストラップ
+      const f = focusable(); f && f[0]?.focus();
+      document.addEventListener('keydown', trap);
+    };
+    const close = () => {
+      backdrop?.classList.remove('open');
+      backdrop?.setAttribute('aria-hidden', 'true');
+      document.removeEventListener('keydown', trap);
+      openBtn?.focus();
+    };
+    const trap = (e) => {
+      if (e.key === 'Escape') return close();
+      if (e.key !== 'Tab') return;
+      const list = [...focusable() || []];
+      if (!list.length) return;
+      const first = list[0], last = list[list.length - 1];
+      if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
+      else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+    };
+
+    openBtn?.addEventListener('click', open);
+    backdrop?.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
+    backdrop?.querySelectorAll('[data-close-modal]')?.forEach(b => b.addEventListener('click', close));
+  })();
+
+  // ========== Tabs ==========
+  (() => {
+    const root = document.querySelector('[data-tabs]');
+    if (!root) return;
+    const tabs = [...root.querySelectorAll('[role="tab"]')];
+    const panels = [...root.querySelectorAll('[role="tabpanel"]')];
+
+    function activate(idx) {
+      tabs.forEach((t, i) => {
+        const sel = String(i === idx);
+        t.setAttribute('aria-selected', sel);
+        panels[i]?.setAttribute('aria-hidden', String(i !== idx));
+      });
+      tabs[idx]?.focus();
+    }
+
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => activate(i));
+      t.addEventListener('keydown', (e) => {
+        const curr = tabs.findIndex(x => x.getAttribute('aria-selected') === 'true');
+        if (e.key === 'ArrowRight') activate((curr + 1) % tabs.length);
+        if (e.key === 'ArrowLeft') activate((curr - 1 + tabs.length) % tabs.length);
+        if (e.key === 'Home') activate(0);
+        if (e.key === 'End') activate(tabs.length - 1);
+      });
+    });
+  })();
+
+  // ========== Accordion ==========
+  (() => {
+    const root = document.querySelector('[data-accordion]');
+    if (!root) return;
+    root.querySelectorAll('.acc-item').forEach(item => {
+      const head = item.querySelector('.acc-head');
+      head?.addEventListener('click', () => {
+        const open = item.classList.toggle('open');
+        head.setAttribute('aria-expanded', String(open));
+      });
+    });
+  })();
+
+  // ========== Toast ==========
+  (() => {
+    const wrap = document.querySelector('.toast-wrap');
+    document.querySelectorAll('[data-toast]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.getAttribute('data-toast') || 'info';
+        const el = document.createElement('div');
+        el.className = `toast ${type}`;
+        el.role = 'status';
+        el.textContent = type === 'success' ? '保存に成功しました' :
+                         type === 'warn' ? '注意が必要です' : '情報メッセージです';
+        wrap?.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

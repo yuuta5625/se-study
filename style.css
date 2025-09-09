@@ -10,23 +10,20 @@
 
 /* ===== レイアウト基盤（sticky footer） ===== */
 html, body { height: 100%; }
-html { scroll-behavior: smooth; }                /* スムーススクロール */
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: 'Noto Sans JP', sans-serif;
   background: #fff7d6 url("./assets/background.jpg") center/cover fixed;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  min-height: 100svh;
   min-height: 100dvh;
 }
-main { flex: 1 0 auto; }                         /* 中央エリアを伸ばす */
+main { flex: 1 0 auto; }
 
 /* ===== ヘッダー ===== */
 header {
-  background: rgba(255,255,255,0.9);
-  backdrop-filter: blur(6px);
+  background: #fff;                 /* ← 不透明 */
   border-bottom: 1px solid #ddd;
   position: sticky;
   top: 0;
@@ -47,19 +44,22 @@ header {
 
 /* ===== コンテンツ ===== */
 .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+
+/* 共通カード（不透明） */
 .card {
-  background: var(--card);
+  background: #fff;                 /* ← 不透明 */
   border-radius: 16px;
   padding: 24px;
+  border: 1px solid #ddd;
   box-shadow: 0 8px 24px rgba(0,0,0,.06);
   transition: .3s;
 }
-.card:hover { transform: translateY(-20px); box-shadow: 0 20px 40px rgba(0,0,0,.2); }
+.card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,.12); }
 
 h1, h2 { color: var(--text); }
 h1 { font-size: 36px; }
 h2 { font-size: 24px; margin-top: 20px; }
-[id] { scroll-margin-top: 72px; }                /* アンカーがヘッダーに隠れない */
+[id] { scroll-margin-top: 72px; }
 
 .subtitle { color: var(--muted); margin: 0 0 24px; }
 .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
@@ -77,7 +77,7 @@ footer {
   margin-top: auto;
   text-align: center; padding: 16px;
   color: var(--muted); font-size: 14px;
-  background: rgba(255,255,255,0.8);
+  background: #fff;                 /* ← 不透明 */
   border-top: 1px solid #ddd;
 }
 
@@ -97,8 +97,8 @@ footer {
   #global-nav {
     display: none;
     position: absolute; left: 0; right: 0;
-    top: calc(56px + 0px);
-    background: rgba(255,255,255,0.98);
+    top: 56px;
+    background: #fff;              /* ← 不透明 */
     border-bottom: 1px solid #ddd;
     padding: 12px 16px;
   }
@@ -120,9 +120,10 @@ footer {
   margin-top: 12px;
 }
 .work-card {
-  background: var(--card);
+  background: #fff;                /* ← 不透明 */
   border-radius: 14px;
   overflow: hidden;
+  border: 1px solid #eee;
   box-shadow: 0 6px 14px rgba(0,0,0,0.06);
   display: flex;
   flex-direction: column;
@@ -130,17 +131,17 @@ footer {
 }
 .work-card:hover { transform: translateY(-6px); box-shadow: 0 14px 28px rgba(0,0,0,0.12); }
 .work-card img { width: 100%; height: 140px; object-fit: cover; display: block; }
-.work-body { padding: 12px; }
+.work-body { padding: 12px; background: #fff; }   /* ← 念のため */
 .work-body h3 { margin: 0 0 6px; font-size: 18px; color: var(--text); }
 .work-body p { margin: 0 0 10px; color: var(--muted); font-size: 14px; }
 
-/* レスポンシブ（タブレット・スマホ） */
 @media (max-width: 992px) { .works-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px)  { .works-grid { grid-template-columns: 1fr; } }
 
 /* === お問い合わせフォーム === */
 .contact-form {
-  margin-top: 12px; background: var(--card); border-radius: 14px; padding: 16px;
+  margin-top: 12px; background: #fff; border-radius: 14px; padding: 16px;
+  border: 1px solid #eee;
   box-shadow: 0 6px 14px rgba(0,0,0,0.06);
 }
 .form-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
@@ -154,11 +155,9 @@ footer {
 }
 .form-actions { display: flex; align-items: center; gap: 12px; }
 .form-note { color: var(--muted); }
-
-/* 小画面でフォームが詰まりすぎないように */
 @media (max-width: 480px) { .contact-form { padding: 14px; } }
 
-/* === スキルセクション === */
+/* === スキル === */
 .skills-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -166,7 +165,7 @@ footer {
   margin-top: 12px; padding: 0; list-style: none;
 }
 .skills-list li {
-  background: var(--card); border: 1px solid #eee; border-radius: 10px;
+  background: #fff; border: 1px solid #eee; border-radius: 10px;
   padding: 12px; text-align: center; font-weight: 500;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
@@ -174,10 +173,8 @@ footer {
 p { margin: 0 0 0.5em; }
 .work-body p strong { color: var(--accent); font-weight: 700; }
 
-/* === SNSリンク（1本化） === */
-.social-links {
-  margin-top: 12px; display: flex; justify-content: center; gap: 32px;
-}
+/* === SNSリンク === */
+.social-links { margin-top: 12px; display: flex; justify-content: center; gap: 32px; }
 .social-links a {
   color: var(--accent);
   font-size: 28px;
@@ -186,246 +183,64 @@ p { margin: 0 0 0.5em; }
   border: 2px solid var(--accent); border-radius: 10px;
   transition: all 0.2s;
   text-decoration: none;
+  background: #fff;                 /* ← 土台を不透明に */
 }
 .social-links a:hover { color: #fff; background: var(--accent); transform: scale(1.1); }
-@media (max-width: 600px) {
-  .social-links a { font-size: 48px; width: 80px; height: 80px; border-width: 3px; }
-}
+@media (max-width: 600px) { .social-links a { font-size: 48px; width: 80px; height: 80px; border-width: 3px; } }
 
 /* ===================== */
 /* ===== 天気アプリ ===== */
 /* ===================== */
-
-/* セクション到着時のずれ対策 */
 #weather { scroll-margin-top: 72px; }
 
-/* デモ到着ハイライト（既存JSが付与） */
-.demo-pulse {
-  animation: demoPulse 1.2s ease-out;
-  outline: 3px solid rgba(56, 132, 255, 0.35);
-  outline-offset: 4px; border-radius: 12px;
-}
-@keyframes demoPulse {
-  0% { box-shadow: 0 0 0 0 rgba(56,132,255,0.45); }
-  70% { box-shadow: 0 0 0 10px rgba(56,132,255,0); }
-  100% { box-shadow: 0 0 0 0 rgba(56,132,255,0); }
-}
-
-/* 見出しは通常フローのまま、本文だけ横並び */
-.weather-row {
-  display: flex; align-items: flex-start; gap: 24px;
-}
-
-/* 左カラム（入力欄） */
+/* 入力UI（中央寄せ） */
 .weather-ui {
-  display: grid; gap: 8px;
-  width: 260px; flex: 0 0 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 300px;
+  margin: 0 auto;
 }
 #city {
   width: 100%; height: 40px; font-size: 16px;
-  padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px;
+  padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; text-align: center;
 }
-#getWeather {
-  height: 40px; border: none; border-radius: 8px;
-  background: #111; color: #fff; cursor: pointer;
+#getWeather, #useGeoloc {
+  height: 40px; border: none; border-radius: 8px; color: #fff; cursor: pointer;
 }
+#getWeather { background: #111; }
+#useGeoloc { background: #666; }
+#useGeoloc:hover { opacity: .9; }
 
-/* 右カラム（結果パネル） */
+/* 結果カード（不透明） */
 .weather-result {
   flex: 1;
   min-height: 160px;
   padding: 14px;
-  border: 1px solid #eee; border-radius: 12px; background: #fff;
-  max-width: 960px; /* 横長で使えるよう少し広め */
+  border: 1px solid #eee; border-radius: 12px;
+  background: #fff;               /* ← 不透明 */
+  max-width: 960px;
+  margin-top: 20px;
+  display: grid;
+  place-items: start center;
+  gap: 12px;
 }
 
-/* 横長カード：左=メイン(1.4fr)、右=スタッツ(1fr) */
 .weather-card {
-  display: grid;
-  grid-template-columns: minmax(320px, 1.4fr) 1fr;
-  align-items: center;
-  column-gap: 18px; row-gap: 8px;
-  background: var(--card); border: 1px solid #eee; border-radius: 12px;
-  padding: 12px; box-shadow: 0 6px 14px rgba(0,0,0,.06);
-}
-
-/* 左の塊（アイコン＋都市＋温度） */
-.weather-main {
-  display: flex; align-items: center; gap: 14px;
-  min-width: 0; /* 左側が必要以上に膨らまないように */
-}
-.weather-icon { image-rendering: -webkit-optimize-contrast; }
-.weather-headings { white-space: nowrap; }  /* 折り返し防止 */
-.weather-headings .city { font-weight: 700; font-size: 18px; line-height: 1.2; }
-.weather-headings .desc { font-size: 14px; color: #666; }
-.temp { font-size: 40px; font-weight: 700; line-height: 1; margin-left: 12px; }
-.temp .unit { font-size: 18px; font-weight: 600; margin-left: 2px; }
-
-/* 右の指標群（チップ状で横に流す） */
-.weather-stats {
-  display: flex; flex-wrap: wrap;
-  gap: 8px 12px; justify-content: flex-start;
-  max-width: 520px;
-}
-.stat {
-  display: inline-flex; align-items: center;
-  border: 1px solid #eee; border-radius: 999px;
-  padding: 6px 10px; font-size: 14px; line-height: 1; background: #fafafa;
-}
-
-/* スマホ時は縦積み */
-@media (max-width: 768px) {
-  .weather-row { flex-direction: column; }
-  .weather-result { max-width: 100%; }
-  .weather-card { grid-template-columns: 1fr; }
-}
-/* ===== 天気カードの新レイアウト ===== */
-.weather-top {
-  display: flex;
-  justify-content: center;   /* 中央寄せ */
-  align-items: center;
-  gap: 40px;                 /* 都市と気温の間隔 */
-  margin-bottom: 12px;
-}
-
-.weather-info {
-  font-size: 18px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.weather-info .desc {
-  font-size: 14px;
-  font-weight: 400;
-  color: #666;
-  margin-left: 4px;
-}
-
-.temp {
-  font-size: 40px;
-  font-weight: 700;
-  line-height: 1;
-}
-.temp .unit {
-  font-size: 18px;
-  font-weight: 600;
-  margin-left: 2px;
-}
-
-.weather-stats {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;   /* 中央寄せ */
-  gap: 8px 12px;
-}
-.stat {
-  border: 1px solid #eee;
-  border-radius: 999px;
-  padding: 6px 10px;
-  font-size: 14px;
-  background: #fafafa;
-}
-/* ====== 天気カードを 1 カラムに強制（中央揃え） ====== */
-.weather-result .weather-card {
-  display: grid !important;          /* 旧: flex/grid 2カラム を打ち消す */
-  grid-template-columns: 1fr !important;
-  justify-items: center;             /* 中央揃え（横方向） */
-  row-gap: 12px;
-  text-align: center;                /* 地名＆説明のテキストも中央に */
-  padding: 16px;                     /* 少し広めに */
-  column-gap: 0 !important;          /* 旧指定のカラム間隔を無効化 */
-}
-
-/* 上段（地名＋説明）と気温は、カードの真ん中で2列横並び＆中央揃え */
-.weather-top {
-  display: grid;
-  grid-auto-flow: column;            /* 横方向に並べる（2列） */
-  align-items: center;
-  justify-content: center;           /* セット全体を中央へ */
-  gap: 40px;                         /* 地名と気温の間隔 */
-}
-
-/* チップ群は下段で中央寄せ横並び */
-.weather-stats {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 12px;
-}
-.weather-ui {
-  display: flex;
-  flex-direction: column; /* 縦並びにする */
-  gap: 12px;              /* 入力欄とボタンの間に余白 */
-  max-width: 300px;       /* 横幅を制限して中央寄せしやすく */
-  margin: 0 auto;         /* 中央寄せ */
-}
-
-.weather-ui input,
-.weather-ui button {
-  padding: 10px;
-  font-size: 16px;
-}
-
-.weather-result {
-  margin-top: 20px;
-  text-align: center;
-}
-/* 全体を中央揃え */
-#weather {
-  text-align: center;
-}
-
-.weather-ui {
-  display: flex;
-  flex-direction: column;  /* 縦並び */
-  gap: 12px;
-  max-width: 300px;
-  margin: 0 auto;          /* 中央寄せ */
-}
-
-.weather-ui input,
-.weather-ui button {
-  padding: 10px;
-  font-size: 16px;
-  text-align: center;      /* 入力文字も中央揃え */
-}
-
-.weather-result {
-  margin-top: 20px;
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-.weather-result img {
-  display: block;
-  margin: 10px auto;       /* アイコンを中央寄せ */
-}
-/* ==== 天気結果の中央寄せ・最終上書き ==== */
-#weather, 
-#weather .weather-result,
-#weather .weather-card,
-#weather .weather-headings,
-#weather .weather-stats {
-  text-align: center !important;
-}
-
-#weather .weather-result {
-  display: grid;               /* 中央寄せしやすい */
-  justify-items: center !important;
-  align-items: start;
-  gap: 12px;
-}
-
-#weather .weather-card {
   display: grid !important;
-  grid-template-columns: 1fr !important;
+  grid-template-columns: 1fr !important;  /* 1カラムで中央 */
   justify-items: center !important;
   row-gap: 12px;
   column-gap: 0 !important;
   padding: 16px;
+  background: #fff;               /* ← 不透明 */
+  border: 1px solid #eee;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0,0,0,.06);
+  text-align: center !important;
 }
 
-#weather .weather-top {
+.weather-top {
   display: grid !important;
   grid-auto-flow: column;
   justify-content: center !important;
@@ -433,140 +248,252 @@ p { margin: 0 0 0.5em; }
   gap: 40px;
 }
 
-#weather .weather-stats {
-  display: flex !important;
-  flex-wrap: wrap;
-  justify-content: center !important;  /* ここが左寄せの原因になりがち */
-  gap: 8px 12px;
+.weather-info {
+  font-size: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.weather-info .desc {
+  font-size: 14px;
+  font-weight: 400;
+  color: #666;
+  margin-left: 4px;
 }
 
-#weather .weather-result img {
-  display: block;
-  margin: 10px auto;
-}
-/* ==== 天気：検索結果の中央寄せ（最終上書き） ==== */
-#weather .weather-result {
-  /* 親を中央寄せ用のグリッドにして中身を中央へ */
-  display: grid !important;
-  place-items: start center !important; /* 縦はstart、横はcenter */
-  text-align: center !important;
-  gap: 12px !important;
-}
+.temp { font-size: 40px; font-weight: 700; line-height: 1; }
+.temp .unit { font-size: 18px; font-weight: 600; margin-left: 2px; }
 
-/* 中のカード自体も中央に固定＆中央テキスト */
-#weather .weather-result > * {
-  margin-inline: auto !important;      /* 左右オートで中央配置 */
-  text-align: center !important;
-}
-
-/* カードの内部で左寄せになる要素を一括矯正 */
-#weather .weather-card,
-#weather .weather-top,
-#weather .weather-headings,
-#weather .weather-stats,
-#weather .weather-card p,
-#weather .weather-card h3,
-#weather .weather-card img {
-  text-align: center !important;
-}
-
-/* ステータスの並び（過去指定の flex-start を潰す） */
-#weather .weather-stats {
+.weather-stats {
   display: flex !important;
   flex-wrap: wrap !important;
   justify-content: center !important;
   gap: 8px 12px !important;
 }
-
-/* アイコンの中央寄せ */
-#weather .weather-result img {
-  display: block !important;
-  margin: 10px auto !important;
-}
-/* ===== 検索結果フェードイン ===== */
-.fade-in {
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeInUp 0.5s ease forwards;
+.stat {
+  display: inline-flex; align-items: center;
+  border: 1px solid #eee; border-radius: 999px;
+  padding: 6px 10px; font-size: 14px; line-height: 1;
+  background: #fafafa;            /* ← 半透明でなく薄グレー */
 }
 
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-/* ===== 天気：状態表示（未定義分の追加） ===== */
-.error {
-  color: #c00;
-  font-weight: 700;
-  padding: 6px 10px;
-  background: #ffecec;
-  border: 1px solid #f5b5b5;
-  border-radius: 8px;
-  display: inline-block;
+@media (max-width: 768px) {
+  .weather-top { gap: 24px; }
 }
 
+/* アニメ系 */
+.fade-in { opacity: 0; transform: translateY(10px); animation: fadeInUp 0.5s ease forwards; }
+@keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 .loading {
-  display: inline-block;
-  width: 22px; height: 22px;
-  border: 3px solid #ddd;
-  border-top-color: #333;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  vertical-align: middle;
+  display: inline-block; width: 22px; height: 22px;
+  border: 3px solid #ddd; border-top-color: #333;
+  border-radius: 50%; animation: spin 1s linear infinite; vertical-align: middle;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* ===== 現在地ボタンの見た目（検索と差別化） ===== */
-#useGeoloc {
-  height: 40px;
-  border: none;
-  border-radius: 8px;
-  background: #666;           /* 検索ボタン(#111)との差別化 */
-  color: #fff;
-  cursor: pointer;
-}
-#useGeoloc:hover { opacity: .9; }
-
-/* 検索UIは常に縦並び */
-#weather .weather-ui {
-  display: flex;
-  flex-direction: column; /* 縦並び */
-  gap: 12px;
-  max-width: 300px;
-  margin: 0 auto;         /* 真ん中寄せ */
+.error {
+  color: #c00; font-weight: 700; padding: 6px 10px;
+  background: #ffecec; border: 1px solid #f5b5b5; border-radius: 8px; display: inline-block;
 }
 
-#weather .weather-ui input,
-#weather .weather-ui button {
-  padding: 10px;
-  font-size: 16px;
-  text-align: center;
-}
 /* ToDo：ボタンの見た目を既存に合わせる */
 .filter-btn { appearance: none; border:1px solid #ddd; background:#fff; color:#333; padding:8px 12px; border-radius:10px; cursor:pointer; }
 .filter-btn[aria-pressed="true"] { background: var(--accent); color:#fff; border-color: var(--accent); }
 .todo-actions .todo-del { appearance:none; border:1px solid #eee; background:#fafafa; color:#333; padding:6px 10px; border-radius:10px; cursor:pointer; }
 .todo-actions .todo-del:hover { background:#f0f0f0; }
 
-/* 共通：キーボード操作のフォーカスリングを強調 */
+/* 共通：フォーカスリング */
 button:focus-visible, a:focus-visible, input:focus-visible {
   outline: 3px solid rgba(58,123,213,.45);
   outline-offset: 2px;
 }
+
+/* ケーススタディのCTA整列 */
 .cs-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center; /* ← これを追加！中央揃え */
-  margin-top: 12px;
+  display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 12px;
 }
-.cs-actions .link-btn {
-  flex: 1 1 200px;       /* 横に広がる（200px以上で揃う） */
-  text-align: center;
-  padding: 8px 0;        /* 縦の余白を小さめに */
-  font-size: 16px;
-  border-radius: 8px;
+.cs-actions .link-btn { flex: 1 1 200px; text-align: center; padding: 8px 0; font-size: 16px; border-radius: 8px; }
+
+/* 追加：ゴーストボタンは不透明グレー */
+.btn { background: var(--accent, #2563eb); color:#fff; }
+.btn.ghost, button.ghost {
+  background: #eee; color: var(--accent);
+  border: 2px solid var(--accent);
 }
 .nav-toggle-bar{display:block;width:22px;height:2px;background:#333;margin:4px 0;border-radius:2px}
+/* UIコンポーネント集の各セクションを白背景にする */
+section {
+  background: #fff;           /* 完全に不透明な白 */
+  border-radius: 16px;        /* 角丸 */
+  padding: 24px;              /* 内側の余白 */
+  margin-bottom: 32px;        /* 下の余白 */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* ほんのり影で浮かせる */
+}
+/* ====== 透け対策：セクション系を丸ごと不透明化（強制上書き） ====== */
+
+/* UIコンポーネント集のブロック（class=section を採用している前提） */
+.section {
+  background: #fff !important;        /* ← 不透明白で固定 */
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 1px solid #e5e7eb;
+}
+
+/* 万一 <section> 要素も使っている場合はこちらも */
+section.ui-section,
+.container > section {
+  background: #fff !important;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 1px solid #e5e7eb;
+}
+
+/* ガラス風の名残を無効化（念のため） */
+:where(.section, section.ui-section, .ui-section, .panel, .surface) {
+  backdrop-filter: none !important;
+}
+
+/* セクション見出し帯などにも半透明が残っていた場合の保険 */
+:where(.section, section.ui-section) > * {
+  background: transparent; /* 子要素の色はそのまま。必要ならここも #fff に */
+}
+/* ===== ボタンの文字を見やすくする修正版 ===== */
+
+/* 通常ボタン */
+button, .btn {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ゴーストボタン（白背景に青文字） */
+.btn.ghost, button.ghost {
+  background: #fff;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+}
+.btn.ghost:hover, button.ghost:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* サブトーン（淡い色に青文字） */
+.btn.subtone, button.subtone {
+  background: #eef4ff;   /* 薄い水色 */
+  color: var(--accent);
+  border: 1px solid #c3d4f7;
+}
+
+/* 丸ボタン */
+.btn.round, button.round {
+  border-radius: 999px;
+}
+
+/* サイズ調整 */
+.btn.small, button.small {
+  font-size: 14px;
+  padding: 6px 12px;
+}
+.btn.large, button.large {
+  font-size: 18px;
+  padding: 12px 20px;
+}
+
+/* 無効状態 */
+button:disabled, .btn.disabled {
+  background: #ccc;
+  color: #666;
+  border: none;
+  cursor: not-allowed;
+}
+/* ===== ボタン可読性・強制上書き（最後に貼る） ===== */
+
+/* デフォルト：白地に濃い文字＋薄い枠 */
+button, .btn, .button, [role="button"],
+[class*="btn"], [class*="button"], .chip, .pill {
+  background: #fff !important;
+  color: #1f2937 !important;          /* 濃いグレー */
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+}
+
+/* 強調（primary）系があれば：濃色＋白文字 */
+button.primary, .btn.primary, [class*="btn-primary"] {
+  background: var(--accent) !important;
+  color: #fff !important;
+  border-color: var(--accent) !important;
+}
+
+/* ゴースト（ghost）系：白地にアクセント色文字＋実線枠 */
+[class*="ghost"] {
+  background: #fff !important;
+  color: var(--accent) !important;
+  border: 2px solid var(--accent) !important;
+}
+
+/* サブトーン（subtone）系：淡色にアクセント色文字 */
+[class*="subtone"] {
+  background: #eef4ff !important;
+  color: var(--accent) !important;
+  border: 1px solid #c3d4f7 !important;
+}
+
+/* 丸ボタン（round / pill） */
+[class*="round"], .pill, .chip {
+  border-radius: 999px !important;
+  padding: 8px 16px !important;
+}
+
+/* 小さめ/大きめ（あれば） */
+[class*="small"] { font-size: 14px !important; padding: 6px 12px !important; }
+[class*="large"] { font-size: 18px !important; padding: 12px 20px !important; }
+
+/* 無効状態は濃いめグレーで読めるように */
+button:disabled, .btn.disabled, [aria-disabled="true"] {
+  background: #e5e7eb !important;
+  color: #6b7280 !important;
+  border-color: #e5e7eb !important;
+  opacity: 1 !important; /* 薄くしない */
+  cursor: not-allowed !important;
+}
+/* ページ先頭のカード（=「UIコンポーネント集」）だけ角丸＆白背景を適用 */
+.container > *:first-child {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px 20px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow: hidden; /* 内側の要素も角丸に沿わせる */
+}
+
+/* 中の帯やナビが角を四角に見せてしまう場合の保険 */
+.container > *:first-child > * {
+  border-radius: inherit;
+}
+/* ===== モーダルの中身を白で塗りつぶす ===== */
+.modal,
+.modal-content,
+.dialog,
+.dialog-content {
+  background: #fff !important;   /* 完全な白背景 */
+  border-radius: 16px;           /* 他カードと同じ角丸 */
+  padding: 24px;                 /* 内側の余白 */
+  border: 1px solid #e5e7eb;     /* 薄い境界線 */
+  box-shadow: 0 12px 32px rgba(0,0,0,0.25); /* 浮き上がる影 */
+}
+#bg-video {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;   /* 画面いっぱいに敷き詰め */
+  z-index: -1;         /* 背景に下げる */
+}
+#bg-video {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;   /* 画面全体に敷き詰め */
+  z-index: -1;         /* 背景にする */
+}

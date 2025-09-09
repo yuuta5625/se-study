@@ -71,13 +71,18 @@
 
 
 <body>
+  
  <!-- ✅ スキップリンク -->
   <a class="skip-link" href="#main">メインコンテンツへ移動</a>
+
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="./assets/ocean.mp4" type="video/mp4" />
+  </video>
 
   <!-- ✅ ヘッダー -->
   <header>
     <div class="header-container">
-      <h1 class="site-title">ここがヘッダーか！</h1>
+      <h1 class="site-title">Welcome to My Portfolio</h1>
 
       <!-- ハンバーガー（SP表示） -->
       <button class="nav-toggle" aria-label="メニューを開閉" aria-expanded="false" aria-controls="global-nav">
@@ -101,22 +106,22 @@
     <div class="container">
 
       <!-- ✅ ヒーローを最上部に追加 -->
-      <section class="hero">
-        <h1 class="title">内山 雄大 – フロントエンド志望</h1>
-        学びを即行動に。小さな改善を積み重ねるエンジニア
-        <p class="lead">HTML/CSS/JS、React学習中。実装重視のケーススタディを公開中。</p>
-        <div class="cta">
-          <a class="btn" href="#works">作品を見る</a>
-          <a class="btn ghost" href="https://github.com/yuuta5625" target="_blank" rel="noopener">GitHub</a>
-        </div>
-      </section>
+       <section class="hero">
+      <h1 class="title">内山 雄大 – フロントエンド志望</h1>
+      <p class="lead-copy">学びを即行動に。小さな改善を積み重ねるエンジニア</p>
+      <p class="lead">HTML/CSS/JS、React学習中。実装重視のケーススタディを公開中。</p>
+      <div class="cta">
+        <a class="btn" href="#works">作品を見る</a>
+        <a class="btn ghost" href="https://github.com/yuuta5625" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </section>
 
       <div class="card">
       <img src="./assets/me.jpg" alt="profile"
      width="120" height="120"
      style="width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:12px;" />
 
-        <h1>ようこそ！私の勉強ページへ 🚀（更新テスト）</h1>
+        <h1>フロントエンド学習の歩み</h1>
         <p>フロントエンドエンジニアを目指しています。</p>
         <p>学んだことをすぐに形にする行動力を強みとし、ポートフォリオ制作やUIデザインの改善に取り組んでいます。</p>
         <p>将来的には React を活用して、よりインタラクティブなWeb体験を提供できるエンジニアを目指します。</p>
@@ -208,7 +213,7 @@
         <h3>UI コンポーネント集</h3>
         <p>ボタンやカードなど再利用しやすいUIをまとめました。</p>
         <p><strong>使用技術：</strong> HTML / CSS / JavaScript</p>
-        <a class="link-btn" href="#" target="_blank" rel="noopener">詳しく</a>
+        <a class="btn" href="./works/ui.html">UI集を見る</a>
       </div>
     </article>
   </div><!-- /.works-grid -->
@@ -270,5 +275,46 @@
 
   <!-- ====== JS（ページ末尾） ====== -->
   <script src="main.js" defer></script>
+  <script>
+(() => {
+  // 念のためブラウザの復元はON
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'auto';
+  }
+
+  const KEY = 'scroll-pos:' + location.pathname;
+
+  // リロード直前のスクロール位置を保存
+  window.addEventListener('beforeunload', () => {
+    sessionStorage.setItem(
+      KEY,
+      JSON.stringify({ x: window.scrollX, y: window.scrollY })
+    );
+  });
+
+  // リロード後にスクロール位置を復元
+  window.addEventListener('load', () => {
+    const nav = performance.getEntriesByType('navigation')[0];
+    if (!nav || nav.type !== 'reload') return;          // リロード以外は何もしない
+    const raw = sessionStorage.getItem(KEY);
+    if (!raw) return;
+
+    const pos = JSON.parse(raw);
+    // smooth が効いているとズレることがあるので一時OFF
+    const html = document.documentElement;
+    const prev = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
+
+    // 画像やフォントのレイアウト確定後に復元
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo(pos.x ?? 0, pos.y ?? 0);
+        html.style.scrollBehavior = prev;
+      });
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
