@@ -826,3 +826,22 @@ ul.skills-list.vstack > li { overflow: visible !important; }
   #contact h2 { margin-bottom: 28px; }
   .contact-form { padding: 24px 18px; border-radius: 16px; }
 }
+.social-links {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.social-links img {
+  width: 32px;   /* サイズ調整 */
+  height: 32px;
+  border-radius: 50%;    /* 丸くしたい場合 */
+  object-fit: cover;     /* アイコンの切り抜き調整 */
+  transition: transform 0.2s, filter 0.2s;
+}
+
+.social-links img:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
