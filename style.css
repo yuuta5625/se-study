@@ -348,7 +348,7 @@ ul.skills-list > li::after {
   position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; /* 最背面 */
 }
 .bg-overlay {
-  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: -1; /* 動画より手前、本文より奥 */
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0); z-index: -1; /* 動画より手前、本文より奥 */
 }
 
 /* ---------------------------------------------------------
@@ -509,3 +509,320 @@ ul.skills-list.vstack > li .bar::before {
 /* 念のための表示保険（隠れてしまう時用） */
 ul.skills-list.vstack,
 ul.skills-list.vstack > li { overflow: visible !important; }
+
+/* ====== Works: カード＆ボタン最終版 ====== */
+
+/* カード基礎 */
+#works .work-card { display: flex; flex-direction: column; }
+#works .work-card > img { width: 100%; height: 180px; object-fit: cover; display: block; }
+
+/* 本文エリア：最初のボタン開始位置を揃える */
+#works .work-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  flex: 1 1 auto;
+  /* ← この高さで「レポジトリ」と「デモを見る」のY位置が揃う。必要なら±8pxずつ微調整 */
+  min-height: 248px;
+}
+
+/* ボタン容器：常に縦積み */
+#works .card-buttons { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+
+/* 単発ボタン（レポジトリ）も下寄せ＆フル幅 */
+#works .work-body > .link-btn,
+#works .work-body > .btn { margin-top: auto; }
+
+/* 共通ボタン（複数でも単発でも同じ見た目） */
+#works .link-btn,
+#works .btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; max-width: 100%; height: 48px;   /* 高さ統一 */
+  padding: 0 16px; box-sizing: border-box;
+  border: 0; border-radius: 10px;
+  background: #ffc078; color: #fff;             /* 薄オレンジ＋白文字 */
+  text-decoration: none;
+
+  /* 可読性：大きく・太く・うっすら縁取り（シャドーなし） */
+  font-size: 19px;               /* 18〜20で好み調整OK */
+  font-weight: 900;
+  letter-spacing: .02em;
+  line-height: 1;
+  
+
+  /* hoverで文字が薄くならないように（グローバルのopacityを無効化） */
+  opacity: 1 !important;
+  transition: background .2s ease, box-shadow .2s ease, transform .06s ease;
+}
+#works .link-btn:hover, #works .btn:hover {
+  background: #ffa94d;
+  box-shadow: 0 4px 12px rgba(255,169,77,0.30);
+  opacity: 1 !important;
+}
+#works .link-btn:active, #works .btn:active {
+  background: #ff922b;
+  transform: translateY(1px);
+}
+
+/* 幽霊ボタン対策（空のaがあれば非表示） */
+#works .work-body a.link-btn:empty,
+#works .card-buttons > a.link-btn:empty { display: none; }
+
+/* はみ出し保険 */
+#works .work-card { min-width: 0; }
+#works .work-body { padding-bottom: 16px; }
+
+/* SPは本文を少し浅くして圧縮（任意） */
+@media (max-width: 600px) {
+  #works .work-body { min-height: 216px; }
+}
+/* ==== Works ボタン文字（白＋影で可読性アップ） ==== */
+#works .link-btn,
+#works .btn {
+  font-size: 19px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: .02em;
+  line-height: 1;
+
+  /* ← これをここに入れる（外に出てた行は削除） */
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+/* 単発ボタン（レポジトリ、UI集を見る）は中央寄せ */
+#works .work-card:has(.work-body > .link-btn:only-child),
+#works .work-card:has(.work-body > .btn:only-child) {
+  justify-content: space-between; /* 上下バランスを取る */
+}
+
+#works .work-card:has(.work-body > .link-btn:only-child) .work-body,
+#works .work-card:has(.work-body > .btn:only-child) .work-body {
+  justify-content: center; /* 本文とボタンを中央寄せ */
+}
+
+#works .work-card:has(.work-body > .link-btn:only-child) .link-btn,
+#works .work-card:has(.work-body > .btn:only-child) .btn {
+  margin-top: 16px; /* 少しだけ余白を追加 */
+}
+/* 単発ボタンのカードは中央寄せにする */
+#works .work-card.single-button .work-body {
+  justify-content: center;     /* 本文＋ボタンを縦方向センターに */
+}
+
+/* 下寄せにしていた共通ルールを、このカードだけ打ち消し */
+#works .work-card.single-button .work-body > .link-btn,
+#works .work-card.single-button .work-body > .btn {
+  margin-top: 0;
+  /* お好みで少しだけ下に余白を持たせるなら */
+  /* margin-top: 12px; */
+}
+/* 単発ボタン（single-buttonクラス付き）の場合だけ下から少し浮かせる */
+#works .work-card.single-button .work-body > .link-btn,
+#works .work-card.single-button .work-body > .btn {
+  margin-top: auto;        /* 下寄せベースは維持 */
+  margin-bottom: 55px;     /* ← 下から少し浮かせて中央寄りに見せる */
+}
+/* レポジトリだけ */
+#works .work-card.repo-button .work-body > .link-btn {
+  margin-bottom: 55px;
+}
+
+/* UI集だけ */
+#works .work-card.ui-button .work-body > .btn {
+  margin-bottom: 40px;  /* お好みで調整 */
+}
+/* お問い合わせセクション */
+#contact {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: var(--card);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.contact-form .form-row {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.contact-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(58,123,213,0.2);
+}
+
+.contact-form .form-actions {
+  margin-top: 20px;
+}
+
+.contact-form button {
+  background: var(--accent);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.contact-form button:hover {
+  background: #2c5ea8; /* アクセント色の濃い版 */
+}
+
+.contact-form .form-note {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+/* 入力欄のサイズ感を調整 */
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  max-width: 100%;       /* 横幅が飛び出さない */
+  padding: 10px 12px;    /* ちょっとコンパクトに */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  box-sizing: border-box; /* ← 必須！ */
+}
+
+/* 各行の余白を少し縮める */
+.contact-form .form-row {
+  margin-bottom: 16px;
+}
+
+/* テキストエリアのリサイズ禁止 */
+.contact-form textarea {
+  resize: none;   /* ← 右下のハンドルを消す */
+  min-height: 120px; /* 必要なら最低高さだけ設定 */
+}
+
+/* フォーム全体の中央寄せと余白 */
+.contact-form {
+  max-width: 500px;   /* ← 横幅を抑える */
+  margin: 0 auto;     /* 中央寄せ */
+  padding: 24px;      /* 内側の余白を少し減らす */
+}
+/* お問い合わせセクション */
+#contact {
+  padding: 80px 20px;
+  background:
+    radial-gradient(1200px 600px at 10% -10%,
+      color-mix(in oklab, var(--accent) 12%, transparent), transparent 40%)
+    ,radial-gradient(900px 400px at 110% 0%,
+      color-mix(in oklab, var(--bar-color) 10%, transparent), transparent 45%);
+}
+
+#contact h2 {
+  margin: 0 auto 36px;
+  text-align: center;
+  letter-spacing: .02em;
+}
+
+/* フォームカード */
+.contact-form {
+  position: relative;
+  max-width: 680px;
+  width: min(92vw, 680px);
+  margin: 0 auto;
+  padding: 32px 28px;
+  background: var(--card);
+  border-radius: 18px;
+  border: 1px solid color-mix(in oklab, var(--accent) 10%, #0000);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.12),
+    0 2px 6px rgba(0,0,0,.06);
+  backdrop-filter: saturate(120%);
+}
+
+/* ← ここにあった .contact-form::before は削除済み */
+
+/* フォーカス時 */
+.contact-form:focus-within {
+  box-shadow:
+    0 16px 40px rgba(0,0,0,.14),
+    0 0 0 6px color-mix(in oklab, var(--accent) 18%, transparent);
+  transition: box-shadow .25s ease;
+}
+
+/* 入力欄調整 */
+.contact-form .form-row { margin-bottom: 16px; text-align: left; }
+.contact-form label { display:block; margin-bottom:8px; font-weight:600; color:var(--text); }
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  max-width: 100%;
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 25%, transparent);
+}
+
+.contact-form textarea {
+  resize: none;
+  min-height: 120px;
+}
+
+/* ボタン */
+.contact-form .form-actions { margin-top: 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.contact-form button {
+  background: var(--accent);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  border: 0;
+  padding: 12px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform .06s ease, filter .2s ease, background .2s ease;
+}
+.contact-form button:hover { filter: brightness(0.96); }
+.contact-form button:active { transform: translateY(1px); }
+
+.contact-form .form-note {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* スマホ調整 */
+@media (max-width: 480px) {
+  #contact { padding: 64px 16px; }
+  #contact h2 { margin-bottom: 28px; }
+  .contact-form { padding: 24px 18px; border-radius: 16px; }
+}
