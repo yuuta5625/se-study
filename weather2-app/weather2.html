@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>天気アイコン最小テスト（昼アイコン統一版）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./weather2.css">
+</head>
+<body>
+  <main class="wrap">
+    <h1>都市を検索 → 天気アイコン表示</h1>
+
+    <form id="cityForm" class="row" autocomplete="off">
+      <label for="city" class="visually-hidden">都市名</label>
+      <input id="city" name="city" type="text" placeholder="例）Tokyo / Los Angeles,US" inputmode="search">
+      <button type="submit" id="searchBtn">検索</button>
+    </form>
+
+    <div id="output" aria-live="polite" class="out">
+      <p id="status" class="status">都市名を入力して「検索」を押してください。</p>
+      <img id="icon" alt="" hidden>
+    </div>
+  </main>
+
+  <script defer src="./weather2.js"></script>
+</body>
+</html>

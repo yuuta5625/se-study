@@ -9,14 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-  <!-- 共通CSS（1回だけ） -->
-  <link rel="stylesheet" href="../style.css?v=5" />
+  <!-- 共通CSS -->
+  <link rel="stylesheet" href="../style.css?v=6" />
+
   <!-- 天気アプリ専用CSS -->
-  <link rel="stylesheet" href="./weather.css?v=4" />
+  <link rel="stylesheet" href="./weather.css?v=11" />
 </head>
 <body>
-<div id="bg" aria-hidden="true"></div>
-
+  <!-- 全画面の固定背景：常に background.jpg -->
+  <div id="bg" aria-hidden="true"></div>
 
   <header>
     <div class="header-container">
@@ -33,16 +34,14 @@
         <button id="getWeather" type="button">検索</button>
         <button id="useGeoloc" type="button" aria-label="現在地で検索">現在地</button>
       </div>
-      <div id="result" class="weather-result">
-        <!-- 検索結果（都市名・気温・天気アイコン）がここに表示されます -->
-      </div>
+
+      <div id="result" class="weather-result"></div>
     </section>
   </main>
-  <!-- 共通JS -->
-  <script src="../main.js" defer></script>
-  <script src="./weather.js" defer></script>
 
   <footer><p>© 2025 内山雄大 | 天気予報アプリ</p></footer>
 
+  <script src="../main.js" defer></script>
+  <script src="./weather.js?v=11" defer></script>
 </body>
 </html>

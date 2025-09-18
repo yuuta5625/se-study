@@ -1,33 +1,17 @@
-(() => {
-  // ===== 設定 =====
+// weather.js（昼アイコン固定。背景は常にbackground.jpg。バッジや背景切替は無し）
+document.addEventListener("DOMContentLoaded", () => {
   const API_KEY = "84a212e7221718ce1d2a784483127e2c";
 
-  // weather.html から見て 1つ上の階層に assets/
-  const BG_BASE = "../assets/";
-
-  // テーマ → 背景画像（まずは clear だけでもOK）
-  const BG_MAP = {
-    "wx-clear":   "clear.jpg",
-    "wx-clouds":  "clouds.jpg",
-    "wx-rain":    "rain.jpg",
-    "wx-snow":    "snow.jpg",
-    "wx-thunder": "thunder.jpg",
-    "wx-mist":    "mist.jpg",
-  };
-
-  // ===== 対象要素 =====
   const cityEl = document.getElementById("city");
   const btnEl  = document.getElementById("getWeather");
   const outEl  = document.getElementById("result");
   const btnGeo = document.getElementById("useGeoloc");
-  const bgEl   = document.getElementById("bg");
-  if (!outEl) return;
 
   let reqSeq = 0;
   let composing = false;
 
-  // ===== ヘルパー =====
   const show = (html) => {
+    if (!outEl) return;
     outEl.style.display = "block";
     outEl.innerHTML = html;
     outEl.firstElementChild?.classList.add("fade-in");
@@ -35,58 +19,12 @@
   const renderError = (msg) => show(`<p class="error" role="alert" style="color:#c00;">${msg}</p>`);
   const normalizeInput = (s) => s.replace(/\u3000/g, " ").replace(/\s+/g, " ").trim();
 
-  // 天気ID → テーマ判定
-  function pickTheme(d) {
-    const id = Number(d.weather?.[0]?.id ?? 800);
-    const icon = d.weather?.[0]?.icon ?? "01d";
-    const isNight = icon.endsWith("n");
-
-    let theme = "wx-clear";
-    if (id >= 200 && id < 300) theme = "wx-thunder";
-    else if (id >= 300 && id < 600) theme = "wx-rain";
-    else if (id >= 600 && id < 700) theme = "wx-snow";
-    else if (id >= 700 && id < 800) theme = "wx-mist";
-    else if (id === 800) theme = "wx-clear";
-    else if (id > 800) theme = "wx-clouds";
-
-    return { theme, isNight };
-  }
-
-  // 背景を適用（#bg レイヤーに画像、bodyはクラスのみ）
-  function applyWeatherBg(d) {
-  const { theme, isNight } = pickTheme(d);
-
-  // 色・フィルタ用のクラスだけ更新（背景画像はここで即変更しない）
-  document.body.classList.remove(
-    "wx-clear","wx-clouds","wx-rain","wx-snow","wx-thunder","wx-mist","wx-night"
-  );
-  document.body.classList.add(theme);
-  if (isNight) document.body.classList.add("wx-night");
-
-  // 背景画像は「プリロード成功したら」#bg に適用
-  const file = BG_MAP[theme];
-  if (!file) return; // マップが無いテーマは初期背景のまま（上書きしない）
-
-  const url = `${BG_BASE}${file}`;
-  const img = new Image();
-  img.onload = () => {
-    const bgEl = document.getElementById("bg");
-    if (bgEl) bgEl.style.backgroundImage = `url("${url}")`;
-  };
-  img.onerror = () => {
-    // 失敗したら何もしない → 初期背景を維持
-    console.warn("背景画像の読み込みに失敗:", url);
-  };
-  img.src = url;
-}
-
-
-  // ===== 描画 =====
+  // カード描画（昼アイコン固定）
   const render = (d) => {
-    const icon = d.weather?.[0]?.icon
-      ? `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`
-      : "";
-    const desc = d.weather?.[0]?.description || "";
+    const w = d.weather?.[0];
+    const desc = w?.description || "";
+    const iconCode = w?.icon ? String(w.icon).replace(/n$/, "d") : "01d"; // 昼固定
+    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
     const html = `
       <div class="weather-card">
@@ -98,7 +36,7 @@
           <div class="temp">${Math.round(d.main.temp)}<span class="unit">℃</span></div>
         </div>
         <div class="media" id="wx-media">
-          ${icon ? `<img class="weather-icon" src="${icon}" alt="${desc}">` : ""}
+          <img class="weather-icon" src="${iconUrl}" alt="${desc}">
         </div>
         <div class="weather-stats" aria-label="詳細データ">
           <span class="stat"><span class="k">体感</span><span class="v">${Math.round(d.main.feels_like)}℃</span></span>
@@ -111,12 +49,10 @@
         </div>
       </div>
     `;
-
     show(html);
-    applyWeatherBg(d);
   };
 
-  // ===== データ取得 =====
+  // ===== 取得 =====
   async function fetchWeather() {
     const raw = cityEl?.value ?? "";
     const q = normalizeInput(raw);
@@ -130,14 +66,9 @@
       const geoRes = await fetch(geoUrl);
       const geo = await geoRes.json();
       if (mySeq !== reqSeq) return;
+      if (!geoRes.ok) return renderError(`位置情報エラー：${geo?.message ?? geoRes.status}`);
+      if (!Array.isArray(geo) || geo.length === 0) return renderError(`都市が見つかりませんでした：「${q}」`);
 
-      if (!geoRes.ok) {
-        console.error("Geocode error:", geo);
-        return renderError(`位置情報エラー：${geo?.message ?? geoRes.status}`);
-      }
-      if (!Array.isArray(geo) || geo.length === 0) {
-        return renderError(`都市が見つかりませんでした：「${q}」`);
-      }
       const { lat, lon, name, country, state } = geo[0];
 
       // 2) 天気
@@ -145,11 +76,8 @@
       const wxRes = await fetch(wxUrl);
       const data = await wxRes.json();
       if (mySeq !== reqSeq) return;
+      if (!wxRes.ok) return renderError(`天気APIエラー：${data?.message ?? wxRes.status}`);
 
-      if (!wxRes.ok) {
-        console.error("Weather error:", data);
-        return renderError(`天気APIエラー：${data?.message ?? wxRes.status}`);
-      }
       data.name = [name, state, country].filter(Boolean).join(", ");
       render(data);
     } catch (e) {
@@ -167,11 +95,7 @@
       const wxRes = await fetch(wxUrl);
       const data = await wxRes.json();
       if (mySeq !== reqSeq) return;
-
-      if (!wxRes.ok) {
-        console.error("Weather error:", data);
-        return renderError(`天気APIエラー：${data?.message ?? wxRes.status}`);
-      }
+      if (!wxRes.ok) return renderError(`天気APIエラー：${data?.message ?? wxRes.status}`);
       render(data);
     } catch (e) {
       if (mySeq !== reqSeq) return;
@@ -216,4 +140,4 @@
     e.preventDefault();
     fetchWeather();
   });
-})();
+});

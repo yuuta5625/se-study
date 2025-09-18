@@ -1,47 +1,35 @@
 /* =========================================================
-   Weather App Styles（背景は #bg レイヤーで管理）
+   Weather App Styles（背景は #bg レイヤーで固定表示）
    ========================================================= */
 
-/* 全画面の背景レイヤー（初期画像を固定しておく） */
+/* 全画面の固定背景（常に background.jpg を表示） */
 #bg{
   position: fixed;
   inset: 0;
-  background: url("../assets/background.jpg") center/cover no-repeat; /* ← 初期背景 */
+  background: url("../assets/weather/background.jpg") center/cover no-repeat;
   z-index: -1;
-  pointer-events: none;
-  transition: background-image 0.6s ease, opacity 0.4s ease;
-}
-#bg::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background: rgba(0,0,0,.25); /* 文字の可読性アップ用の薄いオーバーレイ */
 }
 
-
-
-/* ===== セクションレイアウト ===== */
+/* ===== セクションレイアウト（既存通り） ===== */
 #weather { 
   scroll-margin-top: 72px; 
   text-align: center;
   margin-top: clamp(24px, 8vh, 50px);
-  background: transparent !important;     /* 背景は持たない */
-  background-attachment: scroll !important;
+  background: transparent;
+  background-attachment: scroll;
   box-sizing: border-box;
   padding: 16px;
 }
 
-/* UIブロック */
+/* 入力UI */
 #weather .weather-ui {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: clamp(14px, 2.8vh, 28px) !important;
-  margin: 0 auto !important;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2.8vh, 28px);
+  margin: 0 auto;
   max-width: 300px;
   width: 100%;
 }
-
-/* 入力 */
 #weather #city {
   width: 100%;
   height: 40px;
@@ -66,13 +54,13 @@
 #weather #useGeoloc { background: #666; }
 #weather #useGeoloc:hover { opacity: .9; }
 
-/* 結果領域（外枠は透過） */
+/* 結果領域 */
 #weather .weather-result {
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  margin: 10px auto 8px !important;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  margin: 10px auto 8px;
   max-width: 960px;
   display: grid;
   place-items: start center;
@@ -80,9 +68,10 @@
   text-align: center;
 }
 
-/* カード */
+/* カード（縁取りは青。不要なら消してOK） */
 .weather-card {
   background: #fff;
+  border: 2px solid var(--accent);
   border-radius: 16px;
   padding: 12px;
   box-shadow: 0 6px 16px rgba(0,0,0,.06);
@@ -104,9 +93,25 @@
 .weather-headings .desc { font-size: 14px; color:#111; }
 .temp { font-size: 40px; line-height: 1; font-weight: 800; color:#111; }
 .temp .unit { font-size: 18px; margin-left: 2px; }
-.weather-icon { display: block; width: 96px; height: 96px; margin: 4px auto; }
 
-/* 統計チップ（Flexで中央寄せ） */
+/* アイコン枠（レイアウト維持） */
+#weather .media {
+  position: relative;
+  width: 140px;
+  height: 100px;
+  margin: 6px auto 4px;
+  background: transparent;
+}
+
+/* アイコン画像（必要最小限） */
+#weather img.weather-icon {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin: 4px auto;
+}
+
+/* 統計チップ */
 .weather-stats {
   display: flex;
   flex-wrap: wrap;
@@ -123,7 +128,7 @@
   padding: 8px 12px;
   border: 1px solid rgba(0,0,0,.08);
   border-radius: 999px;
-  background: rgba(245,158,11,.22);   /* オレンジ */
+  background: rgba(245,158,11,.22);
   border-color: rgba(245,158,11,.45);
   color: #111;
   font-size: 13.5px;
@@ -143,159 +148,5 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== テーマクラス（色味補正のみ；画像は #bg で表示） ===== */
-body[class*="wx-"] {
-  background: none !important;       /* body で背景は出さない */
-  margin: 0 !important;
-}
+/* 夜間フィルタ（必要なら残す） */
 body.wx-night { filter: saturate(.95) brightness(.95); }
-
-/* もしヘッダー/フッターが透けて読みにくければ白帯に固定 */
-body[class*="wx-"] header,
-body[class*="wx-"] footer {
-  background: #fff !important;
-  background-image: none !important;
-  color: #111;
-  box-shadow: none !important;
-  border: 0 !important;
-}
-body[class*="wx-"] header a { color: inherit; }
-
-/* メディア（動画は使わないが、枠のサイズは維持） */
-#weather .media {
-  position: relative;
-  width: 140px;
-  height: 100px;
-  margin: 6px auto 4px;
-}
-/* 白線の原因：#weather の上マージンをやめてパディングに置換＋BFC化 */
-header { margin-bottom: 0 !important; }
-
-#weather {
-  margin-top: 0 !important;          /* ← これが一番効く */
-  padding-top: 16px !important;       /* 余白はパディングで付与 */
-  display: flow-root;                 /* = BFCを作ってマージン折り畳みを阻止 */
-  /* 代替: overflow:hidden; でもOK（どちらか一方で十分） */
-}
-/* ===== 上の余白を元の量に戻す：折り畳まれない padding で付与 ===== */
-#weather{
-  margin-top: 0 !important;                       /* 白線の原因だった margin をゼロ */
-  padding-top: clamp(24px, 8vh, 50px) !important; /* 以前と同じ見た目の余白に復元 */
-  display: flow-root;                              /* BFCで折り畳み防止（保険） */
-}
-
-/* セクション先頭の見出しが margin-top で押し上げないように固定 */
-#weather > h1:first-child,
-#weather > h2:first-child,
-#weather > .section-title:first-child{
-  margin-top: 0 !important;        /* 見出しの上マージンは使わない */
-  margin-bottom: 16px;              /* 下だけ適度に空ける（お好みで） */
-}
-
-/* 見出しの直下にある入力UIの塊がある場合は少し間隔を確保 */
-#weather .weather-ui{
-  margin-top: 12px !important;      /* ここで“見出し⇔UI”の隙間を微調整 */
-}
-/* 天気アイコンの見た目をフラットに強制（丸背景/フィルタ等を無効化） */
-#weather .weather-icon{
-  display:block;
-  width:96px; height:96px;
-  margin: 4px auto;
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  filter: none !important;
-  mix-blend-mode: normal !important;
-  position: relative; z-index: 1;
-}
-
-/* アイコンの背後に“丸やオーバーレイ”が仕込まれていた場合の保険 */
-#weather .media{ background: transparent !important; }
-#weather .media::before,
-#weather .media::after{ content:none !important; display:none !important; }
-/* 1) アイコン自体のリセット（黒丸の元を消す） */
-#weather .weather-icon{
-  display:block;
-  width:96px; height:96px; margin:4px auto;
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  filter: none !important;
-  mix-blend-mode: normal !important;
-  position: relative; z-index: 1;
-}
-
-/* 2) アイコンの“台座”になっている場合の対策（丸い背景など） */
-#weather .media{
-  background: transparent !important;
-}
-#weather .media::before,
-#weather .media::after{
-  content: none !important; display:none !important;
-}
-
-/* 3) サイト全体の汎用ルールで img を丸くしている場合の保険 */
-img.weather-icon{ border-radius: 0 !important; background: transparent !important; }
-/* 夜の暗さは #bg::before で制御（アイコンは影響を受けない） */
-body.wx-night #bg::before{ background: rgba(0,0,0,.35); }
-
-/* 親のフィルタは無効化（ここが重要） */
-body[class*="wx-"]{ filter: none !important; }
-/* ===== 黒丸になる原因（[class*="icon"], .icon の漏れ）を #weather 内だけ無効化 ===== */
-#weather [class*="icon"],
-#weather .icon {
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  filter: none !important;
-  mix-blend-mode: normal !important;
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-}
-
-/* 天気アイコンの望ましい見た目を最終確定（サイズ・位置のみ指定） */
-#weather img.weather-icon {
-  display: block !important;
-  width: 96px !important;
-  height: 96px !important;
-  margin: 4px auto !important;
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  filter: none !important;
-  mix-blend-mode: normal !important;
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-}
-/* ===== 黒丸化の元を #weather 内だけ確実に打ち消す ===== */
-#weather [class*="icon"],
-#weather .icon {
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  filter: none !important;
-  mix-blend-mode: normal !important;
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-}
-
-/* 天気アイコンの望ましい最終形（レイアウトは既存のまま） */
-#weather img.weather-icon {
-  display: block !important;
-  width: 96px !important;
-  height: 96px !important;
-  margin: 4px auto !important;
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  filter: none !important;
-  mix-blend-mode: normal !important;
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-}

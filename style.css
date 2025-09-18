@@ -54,7 +54,7 @@ p { margin: 0 0 0.5em; }
 }
 .card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,.12); }
 .subtitle { color: var(--muted); margin: 0 0 24px; }
-.section { margin-top: 24px; padding-top: 16px; border-top: 1px solid #eee; }
+.section { margin-top: 24px; padding-top: 16px; }
 
 /* Focus ring (A11y) */
 button:focus-visible, a:focus-visible, input:focus-visible {
